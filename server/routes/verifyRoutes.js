@@ -1,0 +1,1 @@
+router.post("/verify", upload.single("file"), verifyFile);
