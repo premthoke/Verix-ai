@@ -14,6 +14,22 @@ const detectFake = async (file) => {
     }
   );
 
+  try {
+  const response = await axios.post(AI_URL, formData, {
+    headers: formData.getHeaders(),
+  });
+
+  return response.data;
+
+} catch (error) {
+  console.log("AI ERROR:", error.message);
+
+  // fallback
+  return {
+    confidence: 0.5,
+    result: "Unknown (AI limit reached)"
+  };
+}
   return response.data;
 };
 
