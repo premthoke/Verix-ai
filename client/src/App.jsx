@@ -11,6 +11,9 @@ import {
   Tooltip
 } from "recharts";
 
+// 🔥 YOUR LIVE BACKEND
+const BASE_URL = "https://verix-backend.onrender.com";
+
 function App() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -31,9 +34,17 @@ function App() {
 
     try {
       setLoading(true);
-      const res = await axios.post("https://your-backend.onrender.com/api/upload", formData);
+
+      const res = await axios.post(`${BASE_URL}/api/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
       setResult(res.data);
-    } catch {
+
+    } catch (err) {
+      console.error(err);
       alert("Upload failed");
     } finally {
       setLoading(false);
@@ -47,9 +58,16 @@ function App() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post("https://your-backend.onrender.com/api/verify", formData);
+      const res = await axios.post(`${BASE_URL}/api/verify`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
       alert(`Blockchain: ${res.data.result}`);
-    } catch {
+
+    } catch (err) {
+      console.error(err);
       alert("Verification failed");
     }
   };
@@ -88,7 +106,9 @@ function App() {
 
           <input type="file" onChange={handleFileChange} />
 
-          {preview && <img src={preview} className="preview" />}
+          {preview && (
+            <img src={preview} className="preview" alt="preview" />
+          )}
 
           <button onClick={handleUpload}>Run AI Detection</button>
           <button onClick={handleVerify}>Verify Blockchain</button>
@@ -104,7 +124,15 @@ function App() {
             <>
               {/* RESULT */}
               <div className="result">
-                <span className={result.ai.result === "Fake" ? "fake" : "real"}>
+                <span
+                  className={
+                    result.ai.result === "Fake"
+                      ? "fake"
+                      : result.ai.result === "Real"
+                      ? "real"
+                      : "unknown"
+                  }
+                >
                   {result.ai.result}
                 </span>
               </div>
@@ -123,7 +151,9 @@ function App() {
                 <Tooltip />
               </RadialBarChart>
 
-              <p>Confidence: {Math.round(result.ai.confidence * 100)}%</p>
+              <p>
+                Confidence: {Math.round(result.ai.confidence * 100)}%
+              </p>
 
               {/* 📊 BAR CHART */}
               <BarChart width={250} height={150} data={barData}>
