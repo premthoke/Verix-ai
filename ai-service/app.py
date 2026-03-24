@@ -4,24 +4,25 @@ import cv2
 
 app = Flask(__name__)
 
-# Dummy model (we replace later with real model)
+# Dummy model (we will replace later)
 def detect_fake(image):
-    # Simulated logic
+    # Fake logic (for now)
     return {
         "result": "Fake",
-        "confidence": 0.82
+        "confidence": 0.78
     }
 
-@app.route('/detect', methods=['POST'])
-def detect():
+@app.route('/predict', methods=['POST'])
+def predict():
     file = request.files['file']
-    
+
+    # Convert to image
     file_bytes = np.frombuffer(file.read(), np.uint8)
     img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-    prediction = detect_fake(img)
+    output = detect_fake(img)
 
-    return jsonify(prediction)
+    return jsonify(output)
 
 if __name__ == '__main__':
-  app.run(host="0.0.0.0", port=8000)
+    app.run(port=5001)

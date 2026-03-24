@@ -1,28 +1,25 @@
 const axios = require("axios");
 const FormData = require("form-data");
 
-const AI_URL = "https://verix-ai-9e57.onrender.com/detect";
-
-const detectFake = async (file) => {
+const detectDeepfake = async (file) => {
   try {
     const formData = new FormData();
     formData.append("file", file.buffer, file.originalname);
 
-    const response = await axios.post(AI_URL, formData, {
-      headers: formData.getHeaders(),
-    });
+    const response = await axios.post(
+      "http://localhost:5001/predict",
+      formData,
+      {
+        headers: formData.getHeaders(),
+      }
+    );
 
     return response.data;
 
   } catch (error) {
-    console.log("AI ERROR:", error.message);
-
-    // fallback response (VERY IMPORTANT)
-    return {
-      confidence: 0.5,
-      result: "Unknown (AI limit reached)"
-    };
+    console.error(error.message);
+    throw new Error("AI Service failed");
   }
 };
 
-module.exports = { detectFake };
+module.exports = { detectDeepfake };
