@@ -1,6 +1,6 @@
 import React from "react";
+import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
-import { QRCodeCanvas } from "qrcode.react";
 import {
   RadialBarChart,
   RadialBar,
@@ -13,26 +13,31 @@ import {
 
 const Dashboard = ({ preview, result, loading }) => {
 
-  const chartData = result
-    ? [{ name: "Confidence", value: result.ai.confidence * 100 }]
-    : [];
+  // ✅ SAFE DATA
+  const confidenceRaw = result?.ai?.confidence ?? 0;
+  const confidence = Math.round(confidenceRaw * 100);
 
-  const barData = result
-    ? [
-        { name: "Real", value: result.ai.result === "Real" ? 100 : 0 },
-        { name: "Fake", value: result.ai.result === "Fake" ? 100 : 0 }
-      ]
-    : [];
+  const aiResult = result?.ai?.result ?? "Unknown";
+
+  // ✅ CHART DATA
+  const chartData = [
+    { name: "Confidence", value: confidence }
+  ];
+
+  const barData = [
+    { name: "Real", value: aiResult === "Real" ? 100 : 0 },
+    { name: "Fake", value: aiResult === "Fake" ? 100 : 0 }
+  ];
 
   return (
     <div className="panel">
 
-      {/* 🔥 Heading */}
+      {/* 🔥 HEADER */}
       <h3 style={{ marginBottom: "10px" }}>
         📊 AI + Blockchain Analysis
       </h3>
 
-      {/* 🔄 Animated Loader */}
+      {/* 🔄 LOADER */}
       {loading && (
         <motion.div
           className="loader"
@@ -41,46 +46,59 @@ const Dashboard = ({ preview, result, loading }) => {
         />
       )}
 
+      {/* 🖼 IMAGE PREVIEW */}
       {preview && (
         <img src={preview} className="preview" alt="preview" />
       )}
 
+      {/* 🚀 RESULT */}
       {result && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
 
-          {/* RESULT BADGE */}
+          {/* 🧠 RESULT BADGE */}
           <div className="result">
             <span
               className={
-                result.ai.result === "Fake"
+                aiResult === "Fake"
                   ? "fake"
-                  : result.ai.result === "Real"
+                  : aiResult === "Real"
                   ? "real"
                   : "unknown"
               }
             >
-              {result.ai.result}
+              {aiResult}
             </span>
           </div>
 
-          {/* 🔥 Animated Charts */}
+          {/* 📊 CHART SECTION */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
           >
 
-            <RadialBarChart width={200} height={200} data={chartData}>
+            {/* 🔵 RADIAL */}
+            <RadialBarChart
+              width={200}
+              height={200}
+              cx="50%"
+              cy="50%"
+              innerRadius="60%"
+              outerRadius="100%"
+              data={chartData}
+            >
               <RadialBar dataKey="value" />
               <Tooltip />
             </RadialBarChart>
 
-            <p>Confidence: {Math.round(result.ai.confidence * 100)}%</p>
+            {/* 📊 CONFIDENCE */}
+            <p>Confidence: {confidence}%</p>
 
+            {/* 📊 BAR */}
             <BarChart width={250} height={150} data={barData}>
               <XAxis dataKey="name" />
               <YAxis />
@@ -91,18 +109,27 @@ const Dashboard = ({ preview, result, loading }) => {
           </motion.div>
 
           {/* 🔐 HASH + QR */}
-          <div className="hash">
-            <strong>Hash:</strong>
-            <p>{result.hash}</p>
-{/* <QRCodeCanvas value={result.hash} size={100} /> */}
-            <QRCodeCanvas value={result.hash} size={100} />
-            <p style={{ fontSize: "12px", opacity: 0.6 }}>
-              Scan to verify
-            </p>
-          </div>
+          {result?.hash && (
+            <div className="hash">
+              <strong>Hash:</strong>
+              <p>{result.hash}</p>
+
+              {/* ✅ QR (STABLE LIB) */}
+              <QRCode
+                value={String(result.hash)}
+                size={100}
+                style={{ marginTop: "10px" }}
+              />
+
+              <p style={{ fontSize: "12px", opacity: 0.6 }}>
+                Scan to verify
+              </p>
+            </div>
+          )}
 
         </motion.div>
       )}
+
     </div>
   );
 };

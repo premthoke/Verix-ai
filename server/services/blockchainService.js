@@ -1,3 +1,4 @@
+import something from "./file.js";
 const isLocal = process.env.NODE_ENV !== "production";
 
 const storeOnBlockchain = async (hash, result) => {

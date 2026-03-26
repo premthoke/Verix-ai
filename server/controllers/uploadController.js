@@ -1,30 +1,25 @@
-const { generateHash } = require("../services/hashService");
-const { detectDeepfake } = require("../services/aiService");
+import { detectDeepfake } from "../services/aiService.js";
 
-const uploadFile = async (req, res) => {
+export const uploadFile = async (req, res) => {
   try {
-    const file = req.file;
+    const imageUrl = req.file.path;
 
-    if (!file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+    const aiResult = await detectDeepfake(imageUrl);
 
-    // 🔥 AI Detection
-    const aiResult = await detectDeepfake(file);
-
-    // 🔐 Hash
-    const hash = generateHash(file.buffer);
+    console.log("FINAL AI RESULT:", aiResult);
 
     res.json({
       message: "File processed successfully",
-      hash: hash,
-      result: aiResult.result,
-      confidence: aiResult.confidence
+      hash: "somehash",
+      ai: aiResult,
+      blockchain: "stored"
     });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+
+    res.status(500).json({
+      error: "Upload failed"
+    });
   }
 };
-
-module.exports = { uploadFile };

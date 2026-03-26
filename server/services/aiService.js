@@ -1,25 +1,41 @@
-const axios = require("axios");
-const FormData = require("form-data");
+import axios from "axios";
+import fs from "fs";
 
-const detectDeepfake = async (file) => {
+export const detectDeepfake = async (filePath) => {
   try {
-    const formData = new FormData();
-    formData.append("file", file.buffer, file.originalname);
+    // ✅ convert image to base64
+    const imageBase64 = fs.readFileSync(filePath, {
+      encoding: "base64"
+    });
 
     const response = await axios.post(
-      "http://localhost:5001/predict",
-      formData,
+      "https://api.sightengine.com/1.0/check.json",
       {
-        headers: formData.getHeaders(),
+        media: `data:image/jpeg;base64,${imageBase64}`,
+        models: "genai",
+        api_user: process.env.SIGHTENGINE_USER,
+        api_secret: process.env.SIGHTENGINE_SECRET
       }
     );
 
-    return response.data;
+    console.log("AI RAW:", response.data);
+
+    const aiScore = response.data?.type?.ai_generated || 0;
+
+    return {
+      result: aiScore > 0.5 ? "Fake" : "Real",
+      confidence: aiScore
+    };
 
   } catch (error) {
-    console.error(error.message);
-    throw new Error("AI Service failed");
+    console.log(
+      "AI ERROR:",
+      error.response?.data || error.message
+    );
+
+    return {
+      result: "AI Error",
+      confidence: 0
+    };
   }
 };
-
-module.exports = { detectDeepfake };

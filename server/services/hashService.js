@@ -1,3 +1,4 @@
+import something from "./file.js";
 const crypto = require("crypto");
 
 const generateHash = (buffer) => {
