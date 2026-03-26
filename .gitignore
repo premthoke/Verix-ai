@@ -4,4 +4,4 @@ node_modules/
 __pycache__/
 dist/
 build/
-ignore
+ignore and added .env
