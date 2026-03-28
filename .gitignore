@@ -2,6 +2,7 @@ node_modules/
 .env
 .venv/
 __pycache__/
+uploads/
 dist/
 build/
-ignore and added .env
+

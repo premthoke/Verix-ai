@@ -1,8 +1,5 @@
-import something from "./file.js";
-const crypto = require("crypto");
+import crypto from "crypto";
 
-const generateHash = (buffer) => {
+export const generateHash = (buffer) => {
   return crypto.createHash("sha256").update(buffer).digest("hex");
-};
-
-module.exports = { generateHash };
+};  

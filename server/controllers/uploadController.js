@@ -1,30 +1,20 @@
 import { detectDeepfake } from "../services/aiService.js";
-import crypto from "crypto";
 
 export const uploadFile = async (req, res) => {
   try {
-    const fileBuffer = req.file.buffer;
+    const filePath = req.file.path;
 
-    // ✅ HASH from buffer
-    const hash = crypto
-      .createHash("sha256")
-      .update(fileBuffer)
-      .digest("hex");
-
-    const aiResult = await detectDeepfake(fileBuffer); // 👈 changed
+    const aiResult = await detectDeepfake(filePath);
 
     res.json({
       message: "File processed successfully",
-      hash,
+      hash: "demo_hash_" + Date.now(),
       ai: aiResult,
       blockchain: "stored"
     });
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error.message);
-
-    res.status(500).json({
-      error: "Upload failed"
-    });
+    console.error(error);
+    res.status(500).json({ error: "Upload failed" });
   }
 };

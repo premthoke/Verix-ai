@@ -1,8 +1,13 @@
-export const detectDeepfake = async (fileBuffer) => {
-  try {
-    const form = new FormData();
+import fs from "fs";
+import fetch from "node-fetch";
+import FormData from "form-data";
 
-    form.append("media", new Blob([fileBuffer]), "image.jpg");
+export const detectDeepfake = async (filePath) => {
+  try {
+    const fileBuffer = fs.readFileSync(filePath);
+
+    const form = new FormData();
+    form.append("media", fileBuffer, "image.jpg");
     form.append("models", "genai");
     form.append("api_user", process.env.SIGHTENGINE_USER);
     form.append("api_secret", process.env.SIGHTENGINE_SECRET);
@@ -19,29 +24,22 @@ export const detectDeepfake = async (fileBuffer) => {
 
     const aiScore = data?.type?.ai_generated ?? 0;
 
-// 🔥 Improve interpretation
-let result = "Real";
-let confidence = 1 - aiScore;
-
-if (aiScore > 0.6) {
-  result = "Fake";
-  confidence = aiScore;
-} else if (aiScore > 0.3) {
-  result = "Suspicious";
-  confidence = aiScore;
-}
-
-return {
-  result,
-  confidence: Number(confidence.toFixed(2))
-};
+    return {
+      result:
+        aiScore > 0.7
+          ? "Fake"
+          : aiScore > 0.4
+          ? "Suspicious"
+          : "Real",
+      confidence: aiScore
+    };
 
   } catch (error) {
     console.log("AI ERROR:", error.message);
 
     return {
-      result: "Unknown",
-      confidence: 0.5
+      result: "AI Error",
+      confidence: 0
     };
   }
 };

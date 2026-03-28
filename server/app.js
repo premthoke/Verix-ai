@@ -5,7 +5,11 @@ import express from "express";
 import cors from "cors";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import verifyRoutes from "./routes/verifyRoutes.js";
+import fs from "fs";
 
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 const app = express();
 
 app.use(cors());
