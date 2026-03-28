@@ -19,10 +19,22 @@ export const detectDeepfake = async (fileBuffer) => {
 
     const aiScore = data?.type?.ai_generated ?? 0;
 
-    return {
-      result: aiScore > 0.5 ? "Fake" : "Real",
-      confidence: aiScore
-    };
+// 🔥 Improve interpretation
+let result = "Real";
+let confidence = 1 - aiScore;
+
+if (aiScore > 0.6) {
+  result = "Fake";
+  confidence = aiScore;
+} else if (aiScore > 0.3) {
+  result = "Suspicious";
+  confidence = aiScore;
+}
+
+return {
+  result,
+  confidence: Number(confidence.toFixed(2))
+};
 
   } catch (error) {
     console.log("AI ERROR:", error.message);
