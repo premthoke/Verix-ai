@@ -15,16 +15,14 @@ const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
-    accept: {
-      "image/*": []
-    }
+    accept: { "image/*": [] }
   });
 
   const handleUpload = async () => {
     if (!file) return alert("Select file");
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", file); // ✅ FIXED
 
     try {
       setLoading(true);
@@ -57,20 +55,17 @@ const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
     <div className="panel">
       <h3>Upload Media</h3>
 
-      {/* 🔥 DROPZONE */}
       <div {...getRootProps()} className="dropzone">
         <input {...getInputProps()} />
         <p>📂 Drag & drop image here or click</p>
       </div>
 
-      {/* 📄 FILE NAME */}
       {file && (
         <p style={{ marginTop: "10px", opacity: 0.7 }}>
           📄 {file.name}
         </p>
       )}
 
-      {/* 🚀 BUTTONS */}
       <button onClick={handleUpload}>🚀 Analyze Media</button>
       <button onClick={handleVerify}>🔐 Verify Authenticity</button>
     </div>

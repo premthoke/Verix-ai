@@ -1,26 +1,27 @@
-import axios from "axios";
 import fs from "fs";
 
 export const detectDeepfake = async (filePath) => {
   try {
-    // ✅ convert image to base64
-    const imageBase64 = fs.readFileSync(filePath, {
-      encoding: "base64"
-    });
+    const fileBuffer = fs.readFileSync(filePath);
 
-    const response = await axios.post(
+    const form = new FormData();
+
+    form.append("media", new Blob([fileBuffer]), "image.jpg");
+    form.append("models", "genai");
+    form.append("api_user", process.env.SIGHTENGINE_USER);
+    form.append("api_secret", process.env.SIGHTENGINE_SECRET);
+
+    const response = await fetch(
       "https://api.sightengine.com/1.0/check.json",
       {
-        media: `data:image/jpeg;base64,${imageBase64}`,
-        models: "genai",
-        api_user: process.env.SIGHTENGINE_USER,
-        api_secret: process.env.SIGHTENGINE_SECRET
+        method: "POST",
+        body: form
       }
     );
 
-    console.log("AI RAW:", response.data);
+    const data = await response.json();
 
-    const aiScore = response.data?.type?.ai_generated || 0;
+    const aiScore = data?.type?.ai_generated ?? 0;
 
     return {
       result: aiScore > 0.5 ? "Fake" : "Real",
@@ -28,14 +29,11 @@ export const detectDeepfake = async (filePath) => {
     };
 
   } catch (error) {
-    console.log(
-      "AI ERROR:",
-      error.response?.data || error.message
-    );
+    console.log("AI ERROR:", error.message);
 
     return {
-      result: "AI Error",
-      confidence: 0
+      result: "Unknown",
+      confidence: 0.5
     };
   }
 };

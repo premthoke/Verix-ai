@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import "./App.css";
-
-import Navbar from "./components/Navbar";
 import Upload from "./components/Upload";
-import Dashboard from "./pages/Dashboard"; // ✅ FIXED PATH
+import "./App.css";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -13,9 +10,16 @@ function App() {
 
   return (
     <div className="app">
-      <Navbar />
+
+      {/* 🔥 NAVBAR */}
+      <div className="topbar">
+        <h2>⚡ Verix — Deepfake Proof System</h2>
+        <span className="status">● System Online</span>
+      </div>
 
       <div className="layout">
+
+        {/* LEFT */}
         <Upload
           file={file}
           setFile={setFile}
@@ -24,11 +28,34 @@ function App() {
           setLoading={setLoading}
         />
 
-        <Dashboard
-          preview={preview}
-          result={result}
-          loading={loading}
-        />
+        {/* RIGHT */}
+        <div className="panel">
+          <h3>AI + Blockchain Analysis</h3>
+
+          {loading && <div className="loader"></div>}
+
+          {preview && (
+            <img src={preview} className="preview" />
+          )}
+
+          {result && (
+            <>
+              <div className="result">
+                <span className={result.ai.result === "Fake" ? "fake" : "real"}>
+                  {result.ai.result}
+                </span>
+              </div>
+
+              <p>Confidence: {Math.round(result.ai.confidence * 100)}%</p>
+
+              <div className="hash">
+                <strong>Hash:</strong>
+                <p>{result.hash}</p>
+              </div>
+            </>
+          )}
+        </div>
+
       </div>
     </div>
   );

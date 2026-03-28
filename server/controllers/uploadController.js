@@ -1,16 +1,21 @@
 import { detectDeepfake } from "../services/aiService.js";
+import crypto from "crypto";
 
 export const uploadFile = async (req, res) => {
   try {
-    const imageUrl = req.file.path;
+    const filePath = req.file.path;
 
-    const aiResult = await detectDeepfake(imageUrl);
+    // 🔥 HASH GENERATION
+    const hash = crypto
+      .createHash("sha256")
+      .update(filePath + Date.now())
+      .digest("hex");
 
-    console.log("FINAL AI RESULT:", aiResult);
+    const aiResult = await detectDeepfake(filePath);
 
     res.json({
       message: "File processed successfully",
-      hash: "somehash",
+      hash,
       ai: aiResult,
       blockchain: "stored"
     });

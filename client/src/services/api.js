@@ -1,13 +1,10 @@
 import axios from "axios";
 
+// ✅ CHANGE THIS TO YOUR RENDER BACKEND URL
 const BASE_URL = "https://verix-backend.onrender.com";
 
 export const uploadAPI = (formData) =>
-  axios.post(`${BASE_URL}/api/upload`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  axios.post(`${BASE_URL}/api/upload`, formData);
 
 export const verifyAPI = (formData) =>
-  axios.post(`${BASE_URL}/api/verify`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  axios.post(`${BASE_URL}/api/verify`, formData);
