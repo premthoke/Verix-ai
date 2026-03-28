@@ -1,18 +1,6 @@
 import multer from "multer";
-import fs from "fs";
 
-// ✅ ensure uploads folder exists
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
+// ✅ Use MEMORY storage (BEST for cloud)
+export const upload = multer({
+  storage: multer.memoryStorage()
 });
-
-export const upload = multer({ storage });

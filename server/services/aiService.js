@@ -1,9 +1,5 @@
-import fs from "fs";
-
-export const detectDeepfake = async (filePath) => {
+export const detectDeepfake = async (fileBuffer) => {
   try {
-    const fileBuffer = fs.readFileSync(filePath);
-
     const form = new FormData();
 
     form.append("media", new Blob([fileBuffer]), "image.jpg");

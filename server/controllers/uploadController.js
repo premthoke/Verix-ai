@@ -3,15 +3,15 @@ import crypto from "crypto";
 
 export const uploadFile = async (req, res) => {
   try {
-    const filePath = req.file.path;
+    const fileBuffer = req.file.buffer;
 
-    // 🔥 HASH GENERATION
+    // ✅ HASH from buffer
     const hash = crypto
       .createHash("sha256")
-      .update(filePath + Date.now())
+      .update(fileBuffer)
       .digest("hex");
 
-    const aiResult = await detectDeepfake(filePath);
+    const aiResult = await detectDeepfake(fileBuffer); // 👈 changed
 
     res.json({
       message: "File processed successfully",
@@ -21,7 +21,7 @@ export const uploadFile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("UPLOAD ERROR:", error.message);
 
     res.status(500).json({
       error: "Upload failed"
