@@ -4,10 +4,9 @@ import FormData from "form-data";
 
 export const detectDeepfake = async (filePath) => {
   try {
-    const fileBuffer = fs.readFileSync(filePath);
-
     const form = new FormData();
-    form.append("media", fileBuffer, "image.jpg");
+
+    form.append("media", fs.createReadStream(filePath));
     form.append("models", "genai");
     form.append("api_user", process.env.SIGHTENGINE_USER);
     form.append("api_secret", process.env.SIGHTENGINE_SECRET);
@@ -22,16 +21,18 @@ export const detectDeepfake = async (filePath) => {
 
     const data = await response.json();
 
-    const aiScore = data?.type?.ai_generated ?? 0;
+    console.log("AI RAW RESPONSE:", data);
+
+    const score = data?.type?.ai_generated ?? 0;
 
     return {
       result:
-        aiScore > 0.7
+        score > 0.7
           ? "Fake"
-          : aiScore > 0.4
+          : score > 0.4
           ? "Suspicious"
           : "Real",
-      confidence: aiScore
+      confidence: score
     };
 
   } catch (error) {
