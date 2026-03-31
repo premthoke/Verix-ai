@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // ✅ CHANGE THIS TO YOUR RENDER BACKEND URL
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://verix-ai-1doz.onrender.com";
 
 export const uploadAPI = (formData) =>
   axios.post(`${BASE_URL}/api/upload`, formData);
