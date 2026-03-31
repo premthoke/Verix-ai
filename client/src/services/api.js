@@ -1,10 +1,19 @@
 import axios from "axios";
 
-// ✅ CHANGE THIS TO YOUR RENDER BACKEND URL
-const BASE_URL = "https://verix-ai-1doz.onrender.com";
+// ✅ YOUR BACKEND URL
+const BASE_URL = "https://verix-ai-1doz.onrender.com/api";
 
-export const uploadAPI = (formData) =>
-  axios.post(`${BASE_URL}/api/upload`, formData);
+// UPLOAD
+export const uploadAPI = (formData) => {
+  return axios.post(`${BASE_URL}/upload`, formData);
+};
 
-export const verifyAPI = (formData) =>
-  axios.post(`${BASE_URL}/api/verify`, formData);
+// VERIFY
+export const verifyAPI = (formData) => {
+  return axios.post(`${BASE_URL}/verify`, formData);
+};
+
+// HISTORY
+export const historyAPI = () => {
+  return axios.get(`${BASE_URL}/history`);
+};
