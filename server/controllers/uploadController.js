@@ -5,8 +5,6 @@ import { saveHistory } from "../services/historyService.js";
 
 export const uploadFile = async (req, res) => {
   try {
-    console.log("REQ BODY:", req.body);
-    console.log("REQ FILE:", req.file);
     const file = req.file;
 
     if (!file) {
@@ -14,20 +12,19 @@ export const uploadFile = async (req, res) => {
     }
 
     console.log("FILE RECEIVED:", file.originalname);
-    console.log("FILE SIZE:", file.buffer.length);
 
-    // ✅ USE BUFFER
-    const aiResult = await detectDeepfake(file.buffer);
-    console.log("AI RESULT:", aiResult);
+    const buffer = file.buffer;
 
-    // hash
-    const hash = generateHash(file.buffer);
-    console.log("HASH:", hash);
+    // AI
+    const aiResult = await detectDeepfake(buffer);
 
-    // blockchain (optional in production)
+    // HASH
+    const hash = generateHash(buffer);
+
+    // BLOCKCHAIN
     await storeOnBlockchain(hash, aiResult.result);
 
-    // history
+    // HISTORY
     saveHistory({
       hash,
       result: aiResult.result,
@@ -41,7 +38,7 @@ export const uploadFile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error.message);
+    console.error("UPLOAD ERROR:", error);
 
     res.status(500).json({
       error: "Upload failed",

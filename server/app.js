@@ -6,17 +6,17 @@ import cors from "cors";
 
 import uploadRoutes from "./routes/uploadRoutes.js";
 import verifyRoutes from "./routes/verifyRoutes.js";
-import historyRoutes from "./routes/history.js";
+import historyRoutes from "./routes/historyRoutes.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// routes
-app.use("/api/upload", uploadRoutes);
-app.use("/api/verify", verifyRoutes);
-app.use("/api/history", historyRoutes);
+// ✅ BASE ROUTES (CLEAN)
+app.use("/api", uploadRoutes);
+app.use("/api", verifyRoutes);
+app.use("/api", historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
@@ -26,4 +26,4 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+});   
