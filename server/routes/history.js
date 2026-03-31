@@ -1,38 +1,20 @@
-import { generateHash } from "../services/hashService.js";
-import { verifyFromBlockchain } from "../services/blockchainService.js";
+import express from "express";
+import { getHistory } from "../services/historyService.js";
 
-export const verifyFile = async (req, res) => {
+const router = express.Router();
+
+// ✅ HISTORY ROUTE
+router.get("/history", (req, res) => {
   try {
-    const file = req.file;
-
-    if (!file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    const buffer = file.buffer;
-
-    const hash = generateHash(buffer);
-
-    const result = await verifyFromBlockchain(hash);
-
-    if (!result) {
-      return res.json({
-        verified: false,
-        message: "No record found on blockchain"
-      });
-    }
-
-    res.json({
-      verified: true,
-      result
-    });
-
-  } catch (error) {
-    console.error("VERIFY ERROR:", error);
+    const history = getHistory();
+    res.json(history);
+  } catch (err) {
+    console.error("HISTORY ERROR:", err);
 
     res.status(500).json({
-      error: "Verification failed",
-      details: error.message
+      error: "Failed to fetch history"
     });
   }
-};
+});
+
+export default router;
