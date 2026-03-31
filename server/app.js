@@ -6,7 +6,7 @@ import cors from "cors";
 
 import uploadRoutes from "./routes/uploadRoutes.js";
 import verifyRoutes from "./routes/verifyRoutes.js";
-import historyRoutes from "./routes/historyRoutes.js";
+import historyRoutes from "./routes/history.js";
 
 const app = express();
 
