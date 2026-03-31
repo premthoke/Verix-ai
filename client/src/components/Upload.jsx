@@ -26,23 +26,25 @@ const Upload = ({
   });
 
   const handleUpload = async () => {
-    if (!file) return alert("Select file");
-
+  try {
     const formData = new FormData();
-    formData.append("file", file);
 
-    try {
-      setLoading(true);
-      const res = await uploadAPI(formData);
-      setResult(res.data);
-      setVerifyResult(null); // reset
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    formData.append("file", selectedFile); // MUST be "file"
+
+    const res = await fetch("https://verix-ai-1doz.onrender.com/api/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    console.log("UPLOAD RESPONSE:", data);
+
+  } catch (err) {
+    console.error("UPLOAD ERROR:", err);
+    alert("Upload failed");
+  }
+};
 
   const handleVerify = async () => {
     if (!file) return alert("Select file");

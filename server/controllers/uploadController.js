@@ -5,6 +5,8 @@ import { saveHistory } from "../services/historyService.js";
 
 export const uploadFile = async (req, res) => {
   try {
+    console.log("REQ BODY:", req.body);
+    console.log("REQ FILE:", req.file);
     const file = req.file;
 
     if (!file) {
