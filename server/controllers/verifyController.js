@@ -1,5 +1,5 @@
-import { verifyFromBlockchain } from "../services/blockchainService.js";
 import { generateHash } from "../services/hashService.js";
+import { verifyFromBlockchain } from "../services/blockchainService.js";
 
 export const verifyFile = async (req, res) => {
   try {
@@ -9,28 +9,30 @@ export const verifyFile = async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const hash = generateHash(file.path);
+    const buffer = file.buffer;
 
-    const data = await verifyFromBlockchain(hash);
+    const hash = generateHash(buffer);
 
-    if (!data) {
+    const result = await verifyFromBlockchain(hash);
+
+    if (!result) {
       return res.json({
-        status: "Not Found",
-        hash
+        verified: false,
+        message: "No record found on blockchain"
       });
     }
 
-    return res.json({
-      status: "Verified",
-      hash,
-      result: data
+    res.json({
+      verified: true,
+      result
     });
 
   } catch (error) {
-    console.error("VERIFY ERROR:", error.message);
+    console.error("VERIFY ERROR:", error);
 
     res.status(500).json({
-      error: error.message
+      error: "Verification failed",
+      details: error.message
     });
   }
 };
