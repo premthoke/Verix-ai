@@ -1,41 +1,45 @@
 import { detectDeepfake } from "../services/aiService.js";
 import { generateHash } from "../services/hashService.js";
 import { storeOnBlockchain } from "../services/blockchainService.js";
-import fs from "fs";
+import { saveHistory } from "../services/historyService.js";
 
 export const uploadFile = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // ✅ create temp file (for AI API)
-    const tempPath = `uploads/${Date.now()}.jpg`;
-    fs.writeFileSync(tempPath, req.file.buffer);
+    const filePath = file.path;
 
-    // ✅ generate hash
-    const hash = generateHash(req.file.buffer);
-
-    // ✅ AI detection
-    const aiResult = await detectDeepfake(tempPath);
-
+    const aiResult = await detectDeepfake(filePath);
     console.log("AI RESULT:", aiResult);
 
-    // ✅ store on blockchain
+    const hash = generateHash(filePath);
+    console.log("HASH:", hash);
+
     await storeOnBlockchain(hash, aiResult.result);
 
-    // cleanup temp file
-    fs.unlinkSync(tempPath);
+    // 🔥 SAVE HISTORY
+    saveHistory({
+      hash,
+      result: aiResult.result,
+      confidence: aiResult.confidence,
+      time: new Date().toISOString()
+    });
 
     res.json({
-      message: "File processed successfully",
-      hash,
       ai: aiResult,
-      blockchain: "stored"
+      hash
     });
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-    res.status(500).json({ error: error.message });
+    console.error("UPLOAD ERROR:", error.message);
+
+    res.status(500).json({
+      error: "Upload failed",
+      details: error.message
+    });
   }
 };

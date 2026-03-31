@@ -2,7 +2,14 @@ import React from "react";
 import { useDropzone } from "react-dropzone";
 import { uploadAPI, verifyAPI } from "../services/api";
 
-const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
+const Upload = ({
+  file,
+  setFile,
+  setPreview,
+  setResult,
+  setLoading,
+  setVerifyResult
+}) => {
 
   const onDrop = (acceptedFiles) => {
     if (!acceptedFiles || acceptedFiles.length === 0) return;
@@ -22,12 +29,13 @@ const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
     if (!file) return alert("Select file");
 
     const formData = new FormData();
-    formData.append("file", file); // ✅ FIXED
+    formData.append("file", file);
 
     try {
       setLoading(true);
       const res = await uploadAPI(formData);
       setResult(res.data);
+      setVerifyResult(null); // reset
     } catch (err) {
       console.error(err);
       alert("Upload failed");
@@ -44,7 +52,7 @@ const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
 
     try {
       const res = await verifyAPI(formData);
-      alert(`Blockchain: ${res.data.result}`);
+      setVerifyResult(res.data);
     } catch (err) {
       console.error(err);
       alert("Verification failed");
@@ -60,11 +68,7 @@ const Upload = ({ file, setFile, setPreview, setResult, setLoading }) => {
         <p>📂 Drag & drop image here or click</p>
       </div>
 
-      {file && (
-        <p style={{ marginTop: "10px", opacity: 0.7 }}>
-          📄 {file.name}
-        </p>
-      )}
+      {file && <p className="filename">📄 {file.name}</p>}
 
       <button onClick={handleUpload}>🚀 Analyze Media</button>
       <button onClick={handleVerify}>🔐 Verify Authenticity</button>

@@ -1,0 +1,12 @@
+body {
+  background: #020617;
+  color: white;
+}
+
+.history-card {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+}

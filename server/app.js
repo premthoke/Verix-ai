@@ -3,29 +3,33 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import uploadRoutes from "./routes/uploadRoutes.js";
-import verifyRoutes from "./routes/verifyRoutes.js";
 import fs from "fs";
 
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
+import uploadRoutes from "./routes/uploadRoutes.js";
+import verifyRoutes from "./routes/verifyRoutes.js";
+import historyRoutes from "./routes/history.js";
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// ✅ CLEAN ROUTES
+// create uploads folder if not exists
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
+// routes
 app.use("/api/upload", uploadRoutes);
 app.use("/api/verify", verifyRoutes);
+app.use("/api/history", historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
 });
 
-// ✅ IMPORTANT FOR RENDER
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on port", PORT);
 });

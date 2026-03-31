@@ -1,67 +1,51 @@
 import React, { useState } from "react";
 import Upload from "./components/Upload";
 import "./App.css";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
+import QRCode from "qrcode";
 
 function App() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [result, setResult] = useState(null);
+  const [verifyResult, setVerifyResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // 🔥 CERTIFICATE STYLE PDF
-  const downloadPDF = (data) => {
+  const downloadPDF = async () => {
+    if (!result) return;
+
     const doc = new jsPDF();
 
-    // HEADER
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 210, 30, "F");
-
-    doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
-    doc.text("Verix AI Verification Report", 20, 18);
-
-    doc.setTextColor(0, 0, 0);
-
-    // SECTION TITLE
-    doc.setFontSize(14);
-    doc.text("Analysis Result", 20, 50);
-
-    // RESULT BOX
-    doc.setDrawColor(200);
-    doc.rect(20, 55, 170, 30);
+    doc.text("Verix AI Verification Report", 20, 20);
 
     doc.setFontSize(12);
-    doc.text(`Result: ${data.ai.result}`, 25, 65);
+    doc.text(`Result: ${result.ai.result}`, 20, 40);
     doc.text(
-      `Confidence: ${(data.ai.confidence * 100).toFixed(2)}%`,
-      25,
-      75
-    );
-
-    // HASH
-    doc.setFontSize(14);
-    doc.text("Blockchain Hash", 20, 105);
-
-    doc.setFontSize(10);
-    doc.text(data.hash, 20, 115, { maxWidth: 170 });
-
-    // TIME
-    doc.setFontSize(12);
-    doc.text(
-      `Generated on: ${new Date().toLocaleString()}`,
+      `Confidence: ${Math.round(result.ai.confidence * 100)}%`,
       20,
-      140
+      50
     );
 
-    // FOOTER
-    doc.setTextColor(100);
-    doc.setFontSize(10);
+    const blockchainStatus =
+      verifyResult?.status === "Verified"
+        ? "Verified"
+        : "Not Found";
+
+    doc.text(`Blockchain: ${blockchainStatus}`, 20, 60);
+    doc.text(`Hash: ${result.hash}`, 20, 70);
+
     doc.text(
-      "Powered by Verix AI — Deepfake Detection System",
+      `Generated: ${new Date().toLocaleString()}`,
       20,
-      280
+      80
     );
+
+    // 🔥 QR FIX
+    const qrData = `${window.location.origin}/verify?hash=${result.hash}`;
+    const qrImage = await QRCode.toDataURL(qrData);
+
+    doc.addImage(qrImage, "PNG", 140, 40, 50, 50);
 
     doc.save("verix-report.pdf");
   };
@@ -72,47 +56,49 @@ function App() {
       {/* NAVBAR */}
       <div className="topbar">
         <h2>⚡ Verix AI</h2>
+
+        <div style={{ display: "flex", gap: "15px" }}>
+          <a href="/" style={{ color: "white" }}>Home</a>
+          <a href="/history" style={{ color: "white" }}>History</a>
+        </div>
+
         <span className="status">● System Online</span>
       </div>
 
       <div className="layout">
 
-        {/* LEFT PANEL */}
+        {/* LEFT */}
         <Upload
           file={file}
           setFile={setFile}
           setPreview={setPreview}
           setResult={setResult}
           setLoading={setLoading}
+          setVerifyResult={setVerifyResult}
         />
 
-        {/* RIGHT PANEL */}
+        {/* RIGHT */}
         <div className="panel result-panel">
 
           <h3>AI Analysis</h3>
 
-          {/* LOADING */}
           {loading && (
             <div className="loader-box">
               <div className="loader"></div>
-              <p>Analyzing image... Detecting patterns...</p>
+              <p>Analyzing image...</p>
             </div>
           )}
 
-          {/* IMAGE PREVIEW */}
           {preview && (
             <img src={preview} className="preview" alt="preview" />
           )}
 
-          {/* RESULT */}
           {result && !loading && (
             <>
-              {/* RESULT BADGE */}
               <div className={`badge ${result.ai.result.toLowerCase()}`}>
                 {result.ai.result}
               </div>
 
-              {/* CONFIDENCE CIRCLE */}
               <div className="circle">
                 <svg>
                   <circle cx="70" cy="70" r="60"></circle>
@@ -131,33 +117,36 @@ function App() {
                 </div>
               </div>
 
-              {/* AI INSIGHT */}
               <div className="insight">
                 <h4>AI Insight</h4>
                 <p>
                   {result.ai.result === "Fake"
-                    ? "Possible AI-generated artifacts detected. Edges and textures show irregularities."
-                    : result.ai.result === "Suspicious"
-                    ? "Some inconsistencies detected. Further validation recommended."
-                    : "No strong AI manipulation detected. Image appears natural and consistent."}
+                    ? "AI manipulation detected."
+                    : "Image appears natural."}
                 </p>
               </div>
 
-              {/* HASH */}
               <div className="hash">
                 <strong>Hash:</strong>
                 <p>{result.hash}</p>
               </div>
 
-              {/* PDF BUTTON */}
-              <button onClick={() => downloadPDF(result)}>
-                📄 Download PDF Report
+              {verifyResult && (
+                <div className="verify-box">
+                  <h4>🔐 Blockchain</h4>
+                  <div className="verify success">
+                    {verifyResult.status} → {verifyResult.result}
+                  </div>
+                </div>
+              )}
+
+              <button className="download-btn" onClick={downloadPDF}>
+                📄 Download Certificate
               </button>
             </>
           )}
 
         </div>
-
       </div>
     </div>
   );

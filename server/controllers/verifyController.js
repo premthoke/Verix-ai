@@ -5,30 +5,32 @@ export const verifyFile = async (req, res) => {
   try {
     const file = req.file;
 
-if (!file) {
-  return res.status(400).json({ message: "No file uploaded" });
-}
-    const hash = generateHash(file.buffer);
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const hash = generateHash(file.path);
 
     const data = await verifyFromBlockchain(hash);
 
-    
-
-    if (!data || data === "") {
+    if (!data) {
       return res.json({
         status: "Not Found",
-        message: "No record on blockchain"
+        hash
       });
     }
 
     return res.json({
       status: "Verified",
       hash,
-      result: data.toString()
+      result: data
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+    console.error("VERIFY ERROR:", error.message);
+
+    res.status(500).json({
+      error: error.message
+    });
   }
 };

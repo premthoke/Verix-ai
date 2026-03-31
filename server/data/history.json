@@ -1,0 +1,92 @@
+[
+  {
+    "hash": "fd125315fec0a614b51aa0a142b630c7cb7f6070bf7be7eca22f9222f5bc1568",
+    "result": "Fake",
+    "confidence": 0.99,
+    "time": "2026-03-31T13:12:10.011Z"
+  },
+  {
+    "hash": "6ca108dcd79ea5dd382e11a93dfee7173595cdca35909f0f2dbf708e1f7c7c29",
+    "result": "Fake",
+    "confidence": 0.94,
+    "time": "2026-03-31T13:11:48.764Z"
+  },
+  {
+    "hash": "213d8c3d39f64d8bfb25f35d486c11f1c51da6b34e04d4fab8476e311b5e61fa",
+    "result": "Fake",
+    "confidence": 0.97,
+    "time": "2026-03-31T13:11:35.362Z"
+  },
+  {
+    "hash": "b7b36b461aaad13b6e130a6e757e1c75b6ae34dcb043a06220a8a08af98ff1a4",
+    "result": "Real",
+    "confidence": 0.01,
+    "time": "2026-03-31T13:11:22.375Z"
+  },
+  {
+    "hash": "b7b36b461aaad13b6e130a6e757e1c75b6ae34dcb043a06220a8a08af98ff1a4",
+    "result": "Real",
+    "confidence": 0.01,
+    "time": "2026-03-31T13:05:40.192Z"
+  },
+  {
+    "hash": "b7b36b461aaad13b6e130a6e757e1c75b6ae34dcb043a06220a8a08af98ff1a4",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:09:35.209Z"
+  },
+  {
+    "hash": "7eff528fc9e64e1469a4a2ccecdeb85c09b65662fe95b6ebf7c3f26cb891ca72",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:09:54.912Z"
+  },
+  {
+    "hash": "7eff528fc9e64e1469a4a2ccecdeb85c09b65662fe95b6ebf7c3f26cb891ca72",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:10:04.810Z"
+  },
+  {
+    "hash": "7545b45fde113ff919ee10fca7fe390e0b638f3a438e9ea245fc8b80e1e4e5e8",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:10:16.353Z"
+  },
+  {
+    "hash": "7545b45fde113ff919ee10fca7fe390e0b638f3a438e9ea245fc8b80e1e4e5e8",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:08.209Z"
+  },
+  {
+    "hash": "7545b45fde113ff919ee10fca7fe390e0b638f3a438e9ea245fc8b80e1e4e5e8",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:16.721Z"
+  },
+  {
+    "hash": "eb08acfccf5b69e95fd9e4256857b62d33f92fe1d73ece1be3f0d8abbc71db3d",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:22.536Z"
+  },
+  {
+    "hash": "eb08acfccf5b69e95fd9e4256857b62d33f92fe1d73ece1be3f0d8abbc71db3d",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:29.025Z"
+  },
+  {
+    "hash": "eb08acfccf5b69e95fd9e4256857b62d33f92fe1d73ece1be3f0d8abbc71db3d",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:30.904Z"
+  },
+  {
+    "hash": "eb08acfccf5b69e95fd9e4256857b62d33f92fe1d73ece1be3f0d8abbc71db3d",
+    "result": "AI Error",
+    "confidence": 0,
+    "time": "2026-03-30T21:11:31.174Z"
+  }
+]
