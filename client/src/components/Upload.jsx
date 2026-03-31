@@ -1,79 +1,58 @@
-import React from "react";
-import { useDropzone } from "react-dropzone";
-import { uploadAPI, verifyAPI } from "../services/api";
+import React, { useState } from "react";
 
-const Upload = ({
-  file,
-  setFile,
-  setPreview,
-  setResult,
-  setLoading,
-  setVerifyResult
-}) => {
+const Upload = () => {
+  const [file, setFile] = useState(null);
+  const [result, setResult] = useState(null);
 
-  const onDrop = (acceptedFiles) => {
-    if (!acceptedFiles || acceptedFiles.length === 0) return;
-
-    const selected = acceptedFiles[0];
-    setFile(selected);
-    setPreview(URL.createObjectURL(selected));
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    multiple: false,
-    accept: { "image/*": [] }
-  });
-
   const handleUpload = async () => {
-  try {
-    const formData = new FormData();
-
-    formData.append("file", selectedFile); // MUST be "file"
-
-    const res = await fetch("https://verix-ai-1doz.onrender.com/api/upload", {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await res.json();
-
-    console.log("UPLOAD RESPONSE:", data);
-
-  } catch (err) {
-    console.error("UPLOAD ERROR:", err);
-    alert("Upload failed");
-  }
-};
-
-  const handleVerify = async () => {
-    if (!file) return alert("Select file");
-
-    const formData = new FormData();
-    formData.append("file", file);
+    if (!file) {
+      alert("Please select a file first");
+      return;
+    }
 
     try {
-      const res = await verifyAPI(formData);
-      setVerifyResult(res.data);
+      const formData = new FormData();
+      formData.append("file", file); // ✅ correct key
+
+      const res = await fetch(
+        "https://verix-ai-1doz.onrender.com/api/upload",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const data = await res.json();
+
+      console.log("UPLOAD RESPONSE:", data);
+
+      setResult(data);
+
     } catch (err) {
-      console.error(err);
-      alert("Verification failed");
+      console.error("UPLOAD ERROR:", err);
+      alert("Upload failed");
     }
   };
 
   return (
-    <div className="panel">
-      <h3>Upload Media</h3>
+    <div>
+      <input type="file" onChange={handleFileChange} />
 
-      <div {...getRootProps()} className="dropzone">
-        <input {...getInputProps()} />
-        <p>📂 Drag & drop image here or click</p>
-      </div>
+      <button onClick={handleUpload}>
+        Analyze Media
+      </button>
 
-      {file && <p className="filename">📄 {file.name}</p>}
-
-      <button onClick={handleUpload}>🚀 Analyze Media</button>
-      <button onClick={handleVerify}>🔐 Verify Authenticity</button>
+      {result && (
+        <div>
+          <h3>Result: {result.ai.result}</h3>
+          <p>Confidence: {Math.round(result.ai.confidence * 100)}%</p>
+          <p>Hash: {result.hash}</p>
+        </div>
+      )}
     </div>
   );
 };
