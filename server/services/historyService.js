@@ -1,23 +1,18 @@
 import fs from "fs";
 import path from "path";
 
-// ✅ FIXED PATH (IMPORTANT)
 const FILE = path.resolve("data/history.json");
 
-// GET ALL
 export const getHistory = () => {
   try {
     if (!fs.existsSync(FILE)) return [];
 
-    const data = fs.readFileSync(FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (err) {
-    console.log("❌ READ ERROR:", err.message);
+    return JSON.parse(fs.readFileSync(FILE, "utf-8"));
+  } catch {
     return [];
   }
 };
 
-// SAVE NEW
 export const saveHistory = (entry) => {
   try {
     let history = [];
@@ -32,6 +27,6 @@ export const saveHistory = (entry) => {
 
     console.log("📜 History saved");
   } catch (err) {
-    console.log("❌ SAVE ERROR:", err.message);
+    console.log("SAVE ERROR:", err.message);
   }
 };

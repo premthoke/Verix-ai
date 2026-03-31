@@ -11,17 +11,21 @@ export const uploadFile = async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const filePath = file.path;
+    console.log("FILE RECEIVED:", file.originalname);
+    console.log("FILE SIZE:", file.buffer.length);
 
-    const aiResult = await detectDeepfake(filePath);
+    // ✅ USE BUFFER
+    const aiResult = await detectDeepfake(file.buffer);
     console.log("AI RESULT:", aiResult);
 
-    const hash = generateHash(filePath);
+    // hash
+    const hash = generateHash(file.buffer);
     console.log("HASH:", hash);
 
+    // blockchain (optional in production)
     await storeOnBlockchain(hash, aiResult.result);
 
-    // 🔥 SAVE HISTORY
+    // history
     saveHistory({
       hash,
       result: aiResult.result,

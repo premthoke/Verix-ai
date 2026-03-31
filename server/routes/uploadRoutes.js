@@ -4,14 +4,8 @@ import { uploadFile } from "../controllers/uploadController.js";
 
 const router = express.Router();
 
-// ✅ FIXED STORAGE
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
-});
-
+// ✅ MEMORY STORAGE (IMPORTANT)
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post("/", upload.single("file"), uploadFile);
