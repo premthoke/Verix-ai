@@ -10,7 +10,16 @@ import historyRoutes from "./routes/history.js";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://verix-ai.vercel.app"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  })
+);
 app.use(express.json());
 
 // ✅ BASE ROUTES (CLEAN)
@@ -20,6 +29,10 @@ app.use("/api", historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
+});
+
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend working 🚀" });
 });
 
 const PORT = process.env.PORT || 5000;
