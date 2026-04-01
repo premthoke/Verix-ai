@@ -1,4 +1,4 @@
-<img width="1919" height="1053" alt="Screenshot 2026-04-01 022715" src="https://github.com/user-attachments/assets/17320fe0-e7fb-4c9d-bbdb-ddf4b2a4eeaa" /><div align="center"><h2>⚡ Verix AI</h2></div>
+<div align="center"><h2>⚡ Verix AI</h2></div>
 <div align="center">AI + Blockchain Deepfake Detection System</div>
 <p align="center"> Detect AI-generated media, verify authenticity using blockchain, and generate QR-based verification reports. </p> 
 <p align="center"> 
