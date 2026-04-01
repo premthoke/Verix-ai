@@ -1,4 +1,4 @@
-<div align="center"><h2>⚡ Verix AI</h2></div>
+<img width="1919" height="1053" alt="Screenshot 2026-04-01 022715" src="https://github.com/user-attachments/assets/17320fe0-e7fb-4c9d-bbdb-ddf4b2a4eeaa" /><div align="center"><h2>⚡ Verix AI</h2></div>
 <div align="center">AI + Blockchain Deepfake Detection System</div>
 <p align="center"> Detect AI-generated media, verify authenticity using blockchain, and generate QR-based verification reports. </p> 
 <p align="center"> 
@@ -53,9 +53,12 @@ Front-end
 Back-end
 <img width="1918" height="1051" alt="Screenshot 2026-04-01 021303" src="https://github.com/user-attachments/assets/8e0cd96a-2709-4ad7-a5d8-ea80379cf00f" />
 
+</>
 <img width="1919" height="1052" alt="Screenshot 2026-04-01 022523" src="https://github.com/user-attachments/assets/d2ffeab0-1de3-4975-922b-c11f07d2803b" />
 
-Postman()
+Postman(For testing API)
+<img width="1919" height="1053" alt="Screenshot 2026-04-01 022715" src="https://github.com/user-attachments/assets/264d5251-7426-47ea-b4da-6ab1fbf0af10" />
+
 ---
 
 ## 🛠️ Tech Stack
