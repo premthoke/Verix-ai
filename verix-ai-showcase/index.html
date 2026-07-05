@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verix AI — AI + Blockchain Deepfake Detection System</title>
+  <meta name="description" content="Verix AI is a full-stack AI + Blockchain deepfake detection and media verification system. Detect fake images, verify authenticity on Ethereum, and generate QR-based verification reports." />
+  <meta name="keywords" content="Verix AI, deepfake detection, blockchain verification, AI, Ethereum, media authenticity, SHA-256, QR code" />
+  <meta name="author" content="Prem Thoke" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated background particles -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-icon">🔎</span>
+        <span class="logo-text">Verix<span class="logo-accent">AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#tech-stack" class="nav-link">Tech Stack</a></li>
+        <li><a href="#architecture" class="nav-link">Architecture</a></li>
+        <li><a href="#screenshots" class="nav-link">Screenshots</a></li>
+        <li><a href="#future" class="nav-link">Roadmap</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="https://verix-ai.vercel.app" target="_blank" class="btn btn-primary btn-sm">
+          <span class="btn-glow"></span>
+          Live Demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+        <a href="https://github.com/premthoke/Verix-ai" target="_blank" class="btn btn-ghost btn-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu">
+      <a href="#features" class="mobile-link">Features</a>
+      <a href="#how-it-works" class="mobile-link">How It Works</a>
+      <a href="#tech-stack" class="mobile-link">Tech Stack</a>
+      <a href="#architecture" class="mobile-link">Architecture</a>
+      <a href="#screenshots" class="mobile-link">Screenshots</a>
+      <a href="#future" class="mobile-link">Roadmap</a>
+      <a href="https://verix-ai.vercel.app" target="_blank" class="mobile-link mobile-cta">Live Demo →</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge animate-in">
+        <span class="badge-dot"></span>
+        AI + Blockchain Powered
+      </div>
+      <h1 class="hero-title animate-in delay-1">
+        Detect Deepfakes.<br />
+        <span class="gradient-text">Verify Authenticity.</span>
+      </h1>
+      <p class="hero-subtitle animate-in delay-2">
+        Verix AI combines artificial intelligence with Ethereum blockchain to detect AI-generated media, 
+        generate tamper-proof SHA-256 hashes, and produce QR-verified authenticity reports.
+      </p>
+      <div class="hero-cta animate-in delay-3">
+        <a href="https://verix-ai.vercel.app" target="_blank" class="btn btn-primary btn-lg">
+          <span class="btn-glow"></span>
+          Try Live Demo
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://github.com/premthoke/Verix-ai" target="_blank" class="btn btn-outline btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Source
+        </a>
+      </div>
+      <div class="hero-stats animate-in delay-4">
+        <div class="stat-item">
+          <span class="stat-value" data-count="256">0</span><span class="stat-suffix">-bit</span>
+          <span class="stat-label">SHA Hashing</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" data-count="100">0</span><span class="stat-suffix">%</span>
+          <span class="stat-label">On-Chain Verified</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value">AI</span>
+          <span class="stat-label">Deepfake Detection</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual animate-in delay-3">
+      <div class="hero-card">
+        <div class="card-header">
+          <div class="card-dots"><span></span><span></span><span></span></div>
+          <span class="card-title">verix_analysis.json</span>
+        </div>
+        <pre class="card-code"><code><span class="code-bracket">{</span>
+  <span class="code-key">"file"</span>: <span class="code-string">"suspect_image.png"</span>,
+  <span class="code-key">"result"</span>: <span class="code-danger">"FAKE"</span>,
+  <span class="code-key">"confidence"</span>: <span class="code-number">94.7</span>,
+  <span class="code-key">"hash"</span>: <span class="code-string">"b7b36b46...1e1c75"</span>,
+  <span class="code-key">"blockchain"</span>: <span class="code-success">"VERIFIED"</span>,
+  <span class="code-key">"timestamp"</span>: <span class="code-string">"2026-07-06T02:22:08"</span>,
+  <span class="code-key">"qr_report"</span>: <span class="code-boolean">true</span>
+<span class="code-bracket">}</span></code></pre>
+        <div class="card-scanner">
+          <div class="scanner-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section features-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">Everything You Need for<br /><span class="gradient-text">Media Verification</span></h2>
+        <p class="section-subtitle">A comprehensive suite of tools combining AI detection, blockchain security, and cryptographic verification.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card feature-card-lg" data-animate>
+          <div class="feature-icon feature-icon-ai">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>AI Deepfake Detection</h3>
+          <p>Powered by Sightengine API, the system analyzes uploaded images to detect AI-generated content with high accuracy and returns a detailed confidence score.</p>
+          <div class="feature-tag-row">
+            <span class="feature-tag">Sightengine API</span>
+            <span class="feature-tag">Real-time</span>
+            <span class="feature-tag">Confidence Score</span>
+          </div>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-chain">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <h3>Blockchain Verification</h3>
+          <p>Every media hash is stored on an Ethereum smart contract, creating an immutable and tamper-resistant verification record.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-hash">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+          </div>
+          <h3>SHA-256 Hashing</h3>
+          <p>Every uploaded file receives a unique 256-bit cryptographic hash — fast, secure, and collision resistant.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-qr">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/></svg>
+          </div>
+          <h3>QR Verification</h3>
+          <p>Every report embeds a scannable QR code that links to the verification page for instant validation.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-report">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>PDF Reports</h3>
+          <p>Download a detailed verification certificate with AI result, confidence, hash, blockchain status, and QR code.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-history">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>History Tracking</h3>
+          <p>Browse and search through all previous analyses with full result details, timestamps, and hash records.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-upload">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h3>Drag & Drop UI</h3>
+          <p>Modern glassmorphism interface with drag & drop file upload, animated loaders, and confidence visualizations.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon feature-icon-shield">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h3>Instant Verification</h3>
+          <p>Re-upload any image to verify its authenticity against the blockchain — confirms verified or not found.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="section flow-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">How It Works</span>
+        <h2 class="section-title">From Upload to<br /><span class="gradient-text">Blockchain Proof</span></h2>
+        <p class="section-subtitle">A seamless pipeline that takes any image through AI analysis, cryptographic hashing, and blockchain storage.</p>
+      </div>
+      <div class="flow-timeline">
+        <div class="flow-line"></div>
+        <div class="flow-step" data-animate>
+          <div class="flow-number">01</div>
+          <div class="flow-content">
+            <div class="flow-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <h3>Upload Image</h3>
+            <p>Drag & drop or select an image file. Multer handles secure memory-based file processing.</p>
+          </div>
+        </div>
+        <div class="flow-step" data-animate>
+          <div class="flow-number">02</div>
+          <div class="flow-content">
+            <div class="flow-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>AI Analysis</h3>
+            <p>Sightengine API analyzes the image for deepfake indicators and returns a Real/Fake verdict with confidence.</p>
+          </div>
+        </div>
+        <div class="flow-step" data-animate>
+          <div class="flow-number">03</div>
+          <div class="flow-content">
+            <div class="flow-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+            </div>
+            <h3>Generate Hash</h3>
+            <p>A unique SHA-256 cryptographic hash is generated from the file contents — your digital fingerprint.</p>
+          </div>
+        </div>
+        <div class="flow-step" data-animate>
+          <div class="flow-number">04</div>
+          <div class="flow-content">
+            <div class="flow-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+            </div>
+            <h3>Store on Blockchain</h3>
+            <p>The hash and AI result are permanently stored on an Ethereum smart contract via <code>storeMedia()</code>.</p>
+          </div>
+        </div>
+        <div class="flow-step" data-animate>
+          <div class="flow-number">05</div>
+          <div class="flow-content">
+            <div class="flow-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Get Results & Report</h3>
+            <p>View the detection result, download a PDF verification report with QR code, or verify later anytime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section id="tech-stack" class="section tech-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Tech Stack</span>
+        <h2 class="section-title">Built With<br /><span class="gradient-text">Modern Technologies</span></h2>
+        <p class="section-subtitle">A carefully selected stack powering every layer — from frontend to blockchain.</p>
+      </div>
+      <div class="tech-categories">
+        <div class="tech-category" data-animate>
+          <div class="tech-cat-header">
+            <div class="tech-cat-icon frontend">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Frontend</h3>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" width="18" height="18" />React.js</span>
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" alt="Vite" width="18" height="18" />Vite</span>
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="18" height="18" />CSS3</span>
+            <span class="tech-pill">📦 Axios</span>
+            <span class="tech-pill">📁 React Dropzone</span>
+            <span class="tech-pill">🗺️ React Router</span>
+            <span class="tech-pill">📄 jsPDF</span>
+            <span class="tech-pill">🔲 QRCode</span>
+          </div>
+        </div>
+        <div class="tech-category" data-animate>
+          <div class="tech-cat-header">
+            <div class="tech-cat-icon backend">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <h3>Backend</h3>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="18" height="18" />Node.js</span>
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express" width="18" height="18" />Express.js</span>
+            <span class="tech-pill">📤 Multer</span>
+            <span class="tech-pill">🔐 Crypto</span>
+            <span class="tech-pill">🌐 CORS</span>
+            <span class="tech-pill">⚙️ dotenv</span>
+          </div>
+        </div>
+        <div class="tech-category" data-animate>
+          <div class="tech-cat-header">
+            <div class="tech-cat-icon ai">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/></svg>
+            </div>
+            <h3>Artificial Intelligence</h3>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">🧠 Sightengine API</span>
+            <span class="tech-pill">🎭 Deepfake Detection</span>
+            <span class="tech-pill">📊 Confidence Scoring</span>
+          </div>
+        </div>
+        <div class="tech-category" data-animate>
+          <div class="tech-cat-header">
+            <div class="tech-cat-icon blockchain">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            </div>
+            <h3>Blockchain</h3>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">📜 Solidity</span>
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ethereum/ethereum-original.svg" alt="Ethereum" width="18" height="18" />Ethereum</span>
+            <span class="tech-pill">⛏️ Hardhat</span>
+            <span class="tech-pill">🔗 Ethers.js</span>
+          </div>
+        </div>
+        <div class="tech-category" data-animate>
+          <div class="tech-cat-header">
+            <div class="tech-cat-icon deploy">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3>Deployment</h3>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" alt="Vercel" width="18" height="18" />Vercel</span>
+            <span class="tech-pill">🚀 Render</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section id="architecture" class="section arch-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2 class="section-title">System<br /><span class="gradient-text">Architecture</span></h2>
+        <p class="section-subtitle">A full-stack architecture with clearly separated concerns across client, server, AI, and blockchain layers.</p>
+      </div>
+      <div class="arch-diagram" data-animate>
+        <div class="arch-layer">
+          <div class="arch-label">Client</div>
+          <div class="arch-nodes">
+            <div class="arch-node arch-react">
+              <span class="arch-node-icon">⚛️</span>
+              <span>React + Vite</span>
+              <span class="arch-node-sub">Upload · Verify · History</span>
+            </div>
+          </div>
+        </div>
+        <div class="arch-connector">
+          <svg width="24" height="40" viewBox="0 0 24 40"><path d="M12 0 L12 32 M6 26 L12 32 L18 26" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/></svg>
+          <span class="arch-connector-label">Axios / REST API</span>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-label">Server</div>
+          <div class="arch-nodes">
+            <div class="arch-node arch-express">
+              <span class="arch-node-icon">🟢</span>
+              <span>Express.js API</span>
+              <span class="arch-node-sub">Routes · Controllers · Middleware</span>
+            </div>
+          </div>
+        </div>
+        <div class="arch-connector arch-connector-split">
+          <div class="arch-split-line left"></div>
+          <div class="arch-split-line center"></div>
+          <div class="arch-split-line right"></div>
+        </div>
+        <div class="arch-layer arch-layer-services">
+          <div class="arch-label">Services</div>
+          <div class="arch-nodes arch-nodes-row">
+            <div class="arch-node arch-ai-node">
+              <span class="arch-node-icon">🧠</span>
+              <span>AI Service</span>
+              <span class="arch-node-sub">Sightengine API</span>
+            </div>
+            <div class="arch-node arch-hash-node">
+              <span class="arch-node-icon">#️⃣</span>
+              <span>Hash Service</span>
+              <span class="arch-node-sub">SHA-256 Crypto</span>
+            </div>
+            <div class="arch-node arch-bc-node">
+              <span class="arch-node-icon">⛓️</span>
+              <span>Blockchain</span>
+              <span class="arch-node-sub">Ethers.js + Solidity</span>
+            </div>
+          </div>
+        </div>
+        <div class="arch-connector">
+          <svg width="24" height="40" viewBox="0 0 24 40"><path d="M12 0 L12 32 M6 26 L12 32 L18 26" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/></svg>
+          <span class="arch-connector-label">Storage</span>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-label">Data</div>
+          <div class="arch-nodes arch-nodes-row">
+            <div class="arch-node arch-json-node">
+              <span class="arch-node-icon">📄</span>
+              <span>history.json</span>
+              <span class="arch-node-sub">Local file storage</span>
+            </div>
+            <div class="arch-node arch-eth-node">
+              <span class="arch-node-icon">💎</span>
+              <span>Ethereum</span>
+              <span class="arch-node-sub">Smart Contract</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Folder Structure Section -->
+  <section id="folder-structure" class="section folder-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Codebase</span>
+        <h2 class="section-title">Project<br /><span class="gradient-text">Folder Structure</span></h2>
+      </div>
+      <div class="folder-grid" data-animate>
+        <div class="folder-card">
+          <div class="folder-card-header">
+            <span class="folder-label">📁 client/</span>
+            <span class="folder-badge">Frontend</span>
+          </div>
+          <pre class="folder-tree"><code>├── App.jsx
+├── App.css
+├── components/
+│   └── Upload.jsx
+├── pages/
+│   ├── HistoryPage.jsx
+│   └── VerifyPage.jsx
+└── services/
+    └── api.js</code></pre>
+        </div>
+        <div class="folder-card">
+          <div class="folder-card-header">
+            <span class="folder-label">📁 server/</span>
+            <span class="folder-badge">Backend</span>
+          </div>
+          <pre class="folder-tree"><code>├── app.js
+├── controllers/
+│   ├── uploadController.js
+│   └── verifyController.js
+├── routes/
+│   ├── uploadRoutes.js
+│   └── verifyRoutes.js
+├── services/
+│   ├── aiService.js
+│   ├── blockchainService.js
+│   ├── hashService.js
+│   └── historyService.js
+├── middleware/
+│   └── multerConfig.js
+├── data/
+│   └── history.json
+└── uploads/</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots Section -->
+  <section id="screenshots" class="section screenshots-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Screenshots</span>
+        <h2 class="section-title">See Verix AI<br /><span class="gradient-text">In Action</span></h2>
+        <p class="section-subtitle">A walkthrough of key screens across the application.</p>
+      </div>
+      <div class="screenshot-tabs">
+        <button class="ss-tab active" data-tab="upload">Upload & Analyze</button>
+        <button class="ss-tab" data-tab="report">PDF Report</button>
+        <button class="ss-tab" data-tab="history">History</button>
+        <button class="ss-tab" data-tab="infra">Infrastructure</button>
+      </div>
+      <div class="screenshot-panels">
+        <div class="ss-panel active" id="panel-upload">
+          <div class="ss-gallery">
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-danger">Fake Detected</div>
+              <img src="https://github.com/user-attachments/assets/f180ce1b-ec76-4516-b7f8-069ffddc03cb" alt="Fake image detection upload screen" loading="lazy" />
+            </div>
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-danger">Fake Result</div>
+              <img src="https://github.com/user-attachments/assets/ea3d171c-34bf-44ee-b19b-7c17546a84d1" alt="Fake image analysis result" loading="lazy" />
+            </div>
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-success">Real Detected</div>
+              <img src="https://github.com/user-attachments/assets/6c646a75-8257-4f9a-9742-1d0f51acc877" alt="Real image analysis result" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        <div class="ss-panel" id="panel-report">
+          <div class="ss-gallery">
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-info">QR Report</div>
+              <img src="https://github.com/user-attachments/assets/11520c9a-0b15-41ed-80d0-5f92104a490c" alt="Verification report with QR code" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        <div class="ss-panel" id="panel-history">
+          <div class="ss-gallery">
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-info">History</div>
+              <img src="https://github.com/user-attachments/assets/838bdff1-74b6-4d9a-bb0f-bdff2ae0988a" alt="History page showing past analyses" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        <div class="ss-panel" id="panel-infra">
+          <div class="ss-gallery">
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-info">Frontend Deploy</div>
+              <img src="https://github.com/user-attachments/assets/8a47d0cc-c2f0-40ce-a82d-c770efd9590e" alt="Vercel frontend deployment" loading="lazy" />
+            </div>
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-info">Backend Deploy</div>
+              <img src="https://github.com/user-attachments/assets/8e0cd96a-2709-4ad7-a5d8-ea80379cf00f" alt="Render backend deployment" loading="lazy" />
+            </div>
+            <div class="ss-item">
+              <div class="ss-badge ss-badge-info">API Testing</div>
+              <img src="https://github.com/user-attachments/assets/264d5251-7426-47ea-b4da-6ab1fbf0af10" alt="Postman API testing" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Smart Contract Section -->
+  <section id="contract" class="section contract-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Blockchain</span>
+        <h2 class="section-title">Smart Contract<br /><span class="gradient-text">Interface</span></h2>
+        <p class="section-subtitle">The Solidity smart contract that powers on-chain media verification.</p>
+      </div>
+      <div class="contract-card" data-animate>
+        <div class="card-header">
+          <div class="card-dots"><span></span><span></span><span></span></div>
+          <span class="card-title">MediaVerifier.sol</span>
+        </div>
+        <pre class="card-code contract-code"><code><span class="code-comment">// SPDX-License-Identifier: MIT</span>
+<span class="code-keyword">pragma</span> <span class="code-keyword">solidity</span> <span class="code-string">^0.8.0</span>;
+
+<span class="code-keyword">contract</span> <span class="code-type">MediaVerifier</span> {
+    <span class="code-keyword">struct</span> <span class="code-type">Media</span> {
+        <span class="code-type">string</span>  hash;
+        <span class="code-type">string</span>  result;
+        <span class="code-type">uint256</span> timestamp;
+        <span class="code-type">bool</span>    exists;
+    }
+
+    <span class="code-keyword">mapping</span>(<span class="code-type">string</span> => <span class="code-type">Media</span>) <span class="code-keyword">public</span> records;
+
+    <span class="code-comment">// Store media analysis on-chain</span>
+    <span class="code-keyword">function</span> <span class="code-function">storeMedia</span>(
+        <span class="code-type">string</span> <span class="code-keyword">memory</span> _hash,
+        <span class="code-type">string</span> <span class="code-keyword">memory</span> _result
+    ) <span class="code-keyword">public</span> {
+        records[_hash] = <span class="code-type">Media</span>(_hash, _result, <span class="code-keyword">block</span>.timestamp, <span class="code-keyword">true</span>);
+    }
+
+    <span class="code-comment">// Verify media authenticity</span>
+    <span class="code-keyword">function</span> <span class="code-function">verifyMedia</span>(
+        <span class="code-type">string</span> <span class="code-keyword">memory</span> _hash
+    ) <span class="code-keyword">public</span> <span class="code-keyword">view</span> <span class="code-keyword">returns</span> (<span class="code-type">bool</span>, <span class="code-type">string</span> <span class="code-keyword">memory</span>, <span class="code-type">uint256</span>) {
+        <span class="code-type">Media</span> <span class="code-keyword">memory</span> m = records[_hash];
+        <span class="code-keyword">return</span> (m.exists, m.result, m.timestamp);
+    }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Future Roadmap -->
+  <section id="future" class="section future-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Roadmap</span>
+        <h2 class="section-title">What's<br /><span class="gradient-text">Coming Next</span></h2>
+        <p class="section-subtitle">Planned enhancements to push Verix AI even further.</p>
+      </div>
+      <div class="roadmap-grid">
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">🔗</div>
+          <h3>Public Verification Links</h3>
+          <p>Shareable <code>/verify/:hash</code> URLs for anyone to check media authenticity.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">🎨</div>
+          <h3>NFT Certificates</h3>
+          <p>Mint authenticity as an NFT ownership certificate on-chain.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">☁️</div>
+          <h3>Cloud Blockchain</h3>
+          <p>Migrate from local Hardhat to Polygon, Sepolia, or Ethereum mainnet.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">🤖</div>
+          <h3>Custom AI Model</h3>
+          <p>Train a custom CNN / Vision Transformer / ResNet for deepfake detection.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">🎬</div>
+          <h3>Video Detection</h3>
+          <p>Support MP4, MOV, and AVI files for video deepfake analysis.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">📊</div>
+          <h3>Analytics Dashboard</h3>
+          <p>Charts showing real vs fake stats, detection accuracy, and usage trends.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">👤</div>
+          <h3>User Accounts</h3>
+          <p>Login, personal dashboard, and saved reports per user.</p>
+        </div>
+        <div class="roadmap-card" data-animate>
+          <div class="roadmap-icon">📱</div>
+          <h3>Mobile App</h3>
+          <p>React Native version for on-the-go media verification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section skills-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Skills Demonstrated</span>
+        <h2 class="section-title">Technical<br /><span class="gradient-text">Competencies</span></h2>
+      </div>
+      <div class="skills-marquee" data-animate>
+        <div class="marquee-track">
+          <span class="skill-chip">Full Stack Development</span>
+          <span class="skill-chip">React.js</span>
+          <span class="skill-chip">Node.js</span>
+          <span class="skill-chip">REST APIs</span>
+          <span class="skill-chip">Express.js</span>
+          <span class="skill-chip">Blockchain Dev</span>
+          <span class="skill-chip">Solidity</span>
+          <span class="skill-chip">Ethers.js</span>
+          <span class="skill-chip">Hardhat</span>
+          <span class="skill-chip">AI Integration</span>
+          <span class="skill-chip">SHA-256 Cryptography</span>
+          <span class="skill-chip">QR Code Generation</span>
+          <span class="skill-chip">PDF Generation</span>
+          <span class="skill-chip">CI/CD Deployment</span>
+          <span class="skill-chip">Git & GitHub</span>
+          <span class="skill-chip">File Upload Handling</span>
+          <!-- duplicate for seamless loop -->
+          <span class="skill-chip">Full Stack Development</span>
+          <span class="skill-chip">React.js</span>
+          <span class="skill-chip">Node.js</span>
+          <span class="skill-chip">REST APIs</span>
+          <span class="skill-chip">Express.js</span>
+          <span class="skill-chip">Blockchain Dev</span>
+          <span class="skill-chip">Solidity</span>
+          <span class="skill-chip">Ethers.js</span>
+          <span class="skill-chip">Hardhat</span>
+          <span class="skill-chip">AI Integration</span>
+          <span class="skill-chip">SHA-256 Cryptography</span>
+          <span class="skill-chip">QR Code Generation</span>
+          <span class="skill-chip">PDF Generation</span>
+          <span class="skill-chip">CI/CD Deployment</span>
+          <span class="skill-chip">Git & GitHub</span>
+          <span class="skill-chip">File Upload Handling</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / Footer -->
+  <footer id="footer" class="footer">
+    <div class="footer-glow"></div>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo-icon">🔎</span>
+          <span class="logo-text">Verix<span class="logo-accent">AI</span></span>
+        </div>
+        <p class="footer-tagline">AI + Blockchain Deepfake Detection & Media Verification System</p>
+        <div class="footer-links">
+          <a href="https://verix-ai.vercel.app" target="_blank" class="btn btn-primary btn-md">
+            <span class="btn-glow"></span>
+            Live Demo
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </a>
+          <a href="https://github.com/premthoke/Verix-ai" target="_blank" class="btn btn-outline btn-md">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Repo
+          </a>
+          <a href="https://verix-ai-1doz.onrender.com" target="_blank" class="btn btn-ghost btn-md">
+            API Endpoint
+          </a>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-bottom">
+          <p>Built with 💜 by <strong>Prexie 🐼 (Prem)</strong></p>
+          <p class="footer-copy">© 2026 Verix AI — All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
