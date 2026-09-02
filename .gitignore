@@ -1,7 +1,11 @@
 node_modules/
+server/node_modules/
+client/node_modules/
 .env
 .venv/
 __pycache__/
 dist/
 build/
 
+# Replaced by PostgreSQL in V2 Brick 1 — no longer the source of truth
+server/data/history.json

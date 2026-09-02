@@ -24,8 +24,8 @@ export const uploadFile = async (req, res) => {
     // BLOCKCHAIN
     await storeOnBlockchain(hash, aiResult.result);
 
-    // HISTORY
-    saveHistory({
+    // HISTORY — await so that DB failures are caught and returned as 500
+    await saveHistory({
       hash,
       result: aiResult.result,
       confidence: aiResult.confidence,
