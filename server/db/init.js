@@ -1,22 +1,17 @@
 import { query } from "./index.js";
 
 /**
- * Create the verifications table if it does not already exist.
+ * Initialize all required database tables.
  * Idempotent — safe to call on every server startup.
+ * Throws on failure — caller (app.js) must process.exit(1).
  *
- * Schema:
- *   id         SERIAL PRIMARY KEY          — stable auto-increment ID (used in Brick 5)
- *   hash       VARCHAR(64)  NOT NULL       — SHA-256 hex (always 64 chars)
- *   result     VARCHAR(20)  NOT NULL       — "Real" | "Fake" | "Error" | "AI Error"
- *   confidence NUMERIC(5,4) NOT NULL       — 0.0000–1.0000
- *   timestamp  TIMESTAMPTZ  DEFAULT NOW()  — creation time with timezone
+ * Tables:
  *
- * ── Fail-fast policy ─────────────────────────────────────────────────────────
- * If this throws, the caller (app.js) is responsible for calling process.exit(1).
- * The application must NOT start in a degraded state where history writes silently
- * fail or reads return stale/empty data.
+ *  verifications — Brick 1: AI detection results + hashes
+ *  users         — Brick 2: registered user accounts
  */
 export const initDB = async () => {
+  // ── Brick 1: verifications ──────────────────────────────────────────────────
   await query(`
     CREATE TABLE IF NOT EXISTS verifications (
       id          SERIAL       PRIMARY KEY,
@@ -27,4 +22,17 @@ export const initDB = async () => {
     );
   `);
   console.log("✅ verifications table ready");
+
+  // ── Brick 2: users ──────────────────────────────────────────────────────────
+  await query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id            SERIAL       PRIMARY KEY,
+      name          VARCHAR(100) NOT NULL,
+      email         VARCHAR(255) NOT NULL UNIQUE,
+      password_hash VARCHAR(255) NOT NULL,
+      created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+      updated_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    );
+  `);
+  console.log("✅ users table ready");
 };

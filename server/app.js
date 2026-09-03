@@ -12,6 +12,7 @@ import { initDB } from "./db/init.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import verifyRoutes from "./routes/verifyRoutes.js";
 import historyRoutes from "./routes/history.js";
+import authRoutes from "./routes/auth.js";
 
 // ── Database initialization ───────────────────────────────────────────────────
 // Must run before the server begins accepting requests.
@@ -45,6 +46,7 @@ app.use(express.json());
 app.use("/api", uploadRoutes);
 app.use("/api", verifyRoutes);
 app.use("/api", historyRoutes);
+app.use("/api", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
