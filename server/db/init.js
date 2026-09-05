@@ -10,9 +10,8 @@ import { query } from "./index.js";
  *  users         — registered user accounts (Brick 2)
  *
  * Migrations:
- *  verifications.user_id — nullable FK to users(id) (Brick 3)
- *    Nullable because 16 anonymous records from Brick 1 exist with no owner.
- *    New records always receive a user_id from the authenticated uploader.
+ *  verifications.user_id         — nullable FK to users(id) (Brick 3)
+ *  verifications.verification_id — UUID unique identifier (Brick 4)
  */
 export const initDB = async () => {
   // ── Brick 1: verifications table ───────────────────────────────────────────
@@ -40,13 +39,23 @@ export const initDB = async () => {
   `);
   console.log("✅ users table ready");
 
-  // ── Brick 3: add user_id FK to verifications ────────────────────────────────
-  // Nullable because pre-Brick-3 records have no owner.
-  // ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent (PostgreSQL 9.6+).
-  // ON DELETE CASCADE: deleting a user also removes their verification records.
+  // ── Brick 3: user_id FK ─────────────────────────────────────────────────────
+  // Nullable: pre-Brick-3 anonymous records have no owner.
   await query(`
     ALTER TABLE verifications
     ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE;
   `);
   console.log("✅ verifications.user_id column ready");
+
+  // ── Brick 4: verification_id UUID ───────────────────────────────────────────
+  // DEFAULT gen_random_uuid() backfills all existing rows automatically in one
+  // atomic operation. gen_random_uuid() is available on Neon without extension.
+  // UNIQUE constraint ensures no two verifications share an ID.
+  // Nullable=YES for historical records already had gen_random_uuid() applied;
+  // new INSERTs always provide an explicit UUID from server-side crypto.randomUUID().
+  await query(`
+    ALTER TABLE verifications
+    ADD COLUMN IF NOT EXISTS verification_id UUID UNIQUE DEFAULT gen_random_uuid();
+  `);
+  console.log("✅ verifications.verification_id column ready");
 };

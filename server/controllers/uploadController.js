@@ -19,17 +19,17 @@ export const uploadFile = async (req, res) => {
     // NEVER read from req.body, req.query, or any client-supplied source.
     const userId = req.user.id;
 
-    // AI
+    // AI detection
     const aiResult = await detectDeepfake(buffer);
 
-    // HASH
+    // SHA-256 hash — unchanged, still sent to blockchain
     const hash = generateHash(buffer);
 
-    // BLOCKCHAIN
+    // Blockchain — continues to receive hash + result (unchanged)
     await storeOnBlockchain(hash, aiResult.result);
 
-    // HISTORY — await so DB failures are caught and returned as 500
-    await saveHistory({
+    // Persist to DB — saveHistory returns the generated verificationId
+    const verificationId = await saveHistory({
       userId,
       hash,
       result: aiResult.result,
@@ -37,7 +37,9 @@ export const uploadFile = async (req, res) => {
       time: new Date().toISOString()
     });
 
+    // Response includes verificationId alongside existing ai and hash fields
     res.json({
+      verificationId,
       ai: aiResult,
       hash
     });
