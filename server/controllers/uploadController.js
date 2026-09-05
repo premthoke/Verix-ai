@@ -15,6 +15,10 @@ export const uploadFile = async (req, res) => {
 
     const buffer = file.buffer;
 
+    // userId comes exclusively from the verified JWT via authMiddleware.
+    // NEVER read from req.body, req.query, or any client-supplied source.
+    const userId = req.user.id;
+
     // AI
     const aiResult = await detectDeepfake(buffer);
 
@@ -24,8 +28,9 @@ export const uploadFile = async (req, res) => {
     // BLOCKCHAIN
     await storeOnBlockchain(hash, aiResult.result);
 
-    // HISTORY — await so that DB failures are caught and returned as 500
+    // HISTORY — await so DB failures are caught and returned as 500
     await saveHistory({
+      userId,
       hash,
       result: aiResult.result,
       confidence: aiResult.confidence,
@@ -38,7 +43,7 @@ export const uploadFile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error);
+    console.error("UPLOAD ERROR:", error.message);
 
     res.status(500).json({
       error: "Upload failed",
