@@ -114,9 +114,9 @@ const Dashboard = ({ preview, result, loading }) => {
               <strong>Hash:</strong>
               <p>{result.hash}</p>
 
-              {/* ✅ QR (STABLE LIB) */}
+              {/* QR encodes the permanent public verification URL (Brick 6) */}
               <QRCode
-                value={String(result.hash)}
+                value={`${window.location.origin}/verify/${result.verificationId}`}
                 size={100}
                 style={{ marginTop: "10px" }}
               />

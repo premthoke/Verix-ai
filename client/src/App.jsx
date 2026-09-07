@@ -41,9 +41,11 @@ function App() {
       80
     );
 
-    // 🔥 QR FIX
-    const qrData = `${window.location.origin}/verify?hash=${result.hash}`;
-    const qrImage = await QRCode.toDataURL(qrData);
+    // QR encodes the permanent public verification URL.
+    // window.location.origin works for localhost, Vercel, and any deployment.
+    // result.verificationId is the UUID from Brick 4/5 — the stable public ID.
+    const verificationUrl = `${window.location.origin}/verify/${result.verificationId}`;
+    const qrImage = await QRCode.toDataURL(verificationUrl);
 
     doc.addImage(qrImage, "PNG", 140, 40, 50, 50);
 
