@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/verify" element={<VerifyPage />} />
+        <Route path="/verify/:verificationId" element={<VerifyPage />} />
         <Route path="/history" element={<HistoryPage />} />
       </Routes>
     </BrowserRouter>

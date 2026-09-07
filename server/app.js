@@ -13,6 +13,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import verifyRoutes from "./routes/verifyRoutes.js";
 import historyRoutes from "./routes/history.js";
 import authRoutes from "./routes/auth.js";
+import publicVerifyRoutes from "./routes/publicVerify.js";
 
 // ── Database initialization ───────────────────────────────────────────────────
 // Must run before the server begins accepting requests.
@@ -47,6 +48,7 @@ app.use("/api", uploadRoutes);
 app.use("/api", verifyRoutes);
 app.use("/api", historyRoutes);
 app.use("/api", authRoutes);
+app.use("/api", publicVerifyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
