@@ -1,6 +1,9 @@
 # Node modules
 /node_modules
 
+# Local environment — NEVER commit real credentials
+.env
+
 # Compilation output
 /dist
 
