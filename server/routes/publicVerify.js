@@ -13,7 +13,10 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  * Anyone with a verificationId can look up the verification record.
  *
  * Returns a safe public response:
- *   { verificationId, hash, result, confidence, verifiedAt }
+ *   { verificationId, hash, result, confidence, verifiedAt, txHash, blockchainStatus }
+ *
+ * txHash          — Ethereum transaction hash (null for legacy/failed records)
+ * blockchainStatus — 'confirmed' | 'pending' | 'failed' | 'legacy' | null
  *
  * Never returns: user_id, user name, user email, password_hash,
  *   internal database id, JWT, or any server credentials.
@@ -32,7 +35,8 @@ router.get("/verify/:verificationId", async (req, res) => {
 
   try {
     const result = await query(
-      `SELECT verification_id, hash, result, confidence, timestamp
+      `SELECT verification_id, hash, result, confidence, timestamp,
+              tx_hash, blockchain_status
        FROM verifications
        WHERE verification_id = $1`,
       [verificationId]
@@ -46,11 +50,13 @@ router.get("/verify/:verificationId", async (req, res) => {
 
     // Return safe public fields only — no user_id, no internal id, no personal data
     return res.json({
-      verificationId: row.verification_id,
-      hash: row.hash,
-      result: row.result,
-      confidence: parseFloat(row.confidence),
-      verifiedAt: row.timestamp
+      verificationId:   row.verification_id,
+      hash:             row.hash,
+      result:           row.result,
+      confidence:       parseFloat(row.confidence),
+      verifiedAt:       row.timestamp,
+      txHash:           row.tx_hash           ?? null,
+      blockchainStatus: row.blockchain_status  ?? null
     });
 
   } catch (err) {

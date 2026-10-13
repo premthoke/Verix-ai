@@ -1,12 +1,13 @@
 import "dotenv/config";
-import "@nomicfoundation/hardhat-ethers";
+import { defineConfig } from "hardhat/config";
+import hardhatEthers from "@nomicfoundation/hardhat-ethers";
 
-export default {
+export default defineConfig({
+  plugins: [hardhatEthers],
+
   solidity: "0.8.20",
+
   networks: {
-    // Sepolia testnet — use for production-style testing before mainnet.
-    // Hardhat 3 requires type: "http" for external RPC networks.
-    // Set SEPOLIA_RPC_URL and PRIVATE_KEY in blockchain/.env (never commit .env).
     sepolia: {
       type: "http",
       url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org",
@@ -15,4 +16,4 @@ export default {
         : []
     }
   }
-};
+});

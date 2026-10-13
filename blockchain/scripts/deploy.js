@@ -1,56 +1,57 @@
-/**
- * MediaVerify deployment script — Hardhat 3
- *
- * Usage:
- *   npx hardhat run scripts/deploy.js --network sepolia
- *
- * Prerequisites:
- *   1. Copy blockchain/.env.example → blockchain/.env
- *   2. Fill in SEPOLIA_RPC_URL and PRIVATE_KEY (never commit .env)
- *   3. Ensure the deployer wallet has Sepolia ETH
- *      (get free at https://sepoliafaucet.com)
- *   4. npm install in blockchain/
- *   5. npx hardhat compile
- *
- * The deployer wallet becomes the contract owner.
- * The same PRIVATE_KEY must be set on Render as the backend signer.
- *
- * After deployment, update Render environment variables:
- *   CONTRACT_ADDRESS = <printed address>
- *   RPC_URL          = <your SEPOLIA_RPC_URL>
- *   PRIVATE_KEY      = <same key used here>
- */
-import { ethers } from "hardhat";
+import { network } from "hardhat";
 
 async function main() {
+  // Hardhat 3: ethers is provided by the network connection.
+  const { ethers } = await network.create();
+
   const [deployer] = await ethers.getSigners();
 
-  console.log("Deploying MediaVerify from:", deployer.address);
+  console.log("Deploying MediaVerify...");
+  console.log("Deployer:", deployer.address);
 
   const balance = await ethers.provider.getBalance(deployer.address);
-  console.log("Deployer balance:", ethers.formatEther(balance), "ETH");
+
+  console.log(
+    "Deployer balance:",
+    ethers.formatEther(balance),
+    "SepoliaETH"
+  );
 
   if (balance === 0n) {
     throw new Error(
-      "Deployer wallet has 0 ETH. Get Sepolia ETH from https://sepoliafaucet.com"
+      "Deployer wallet has no SepoliaETH."
     );
   }
 
-  // Deploy — pass deployer as initialOwner so only this wallet can call storeMedia()
   const MediaVerify = await ethers.getContractFactory("MediaVerify");
-  const contract = await MediaVerify.deploy(deployer.address);
-  await contract.waitForDeployment();
 
-  const address = await contract.getAddress();
+  const mediaVerify = await MediaVerify.deploy(deployer.address);
 
-  console.log("\n✅ Contract deployed to:", address);
-  console.log("\nUpdate Render environment variables:");
-  console.log("  CONTRACT_ADDRESS =", address);
-  console.log("  RPC_URL          = <your SEPOLIA_RPC_URL>");
-  console.log("  PRIVATE_KEY      = <same key used to deploy>\n");
+  console.log("Waiting for deployment confirmation...");
+
+  await mediaVerify.waitForDeployment();
+
+  const contractAddress = await mediaVerify.getAddress();
+
+  console.log("");
+  console.log("========================================");
+  console.log("MediaVerify deployed successfully!");
+  console.log("========================================");
+  console.log("Contract address:", contractAddress);
+
+  const deploymentTx = mediaVerify.deploymentTransaction();
+
+  if (deploymentTx) {
+    console.log("Transaction hash:", deploymentTx.hash);
+  }
+
+  console.log("");
+  console.log(
+    `Set CONTRACT_ADDRESS=${contractAddress} in the server environment.`
+  );
 }
 
-main().catch((err) => {
-  console.error("Deployment failed:", err.message);
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });
