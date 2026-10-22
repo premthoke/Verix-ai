@@ -23,7 +23,9 @@ export const uploadFile = async (req, res) => {
     const userId = req.user.id;
 
     // ── Step 1: AI detection ─────────────────────────────────────────────────
-    const aiResult = await detectDeepfake(buffer);
+    // Pass the actual MIME type so aiService uses the correct content-type
+    // in the multipart upload and can reject unsupported formats explicitly.
+    const aiResult = await detectDeepfake(buffer, file.mimetype);
 
     // ── Step 2: SHA-256 hash — unchanged, still sent to blockchain ───────────
     const hash = generateHash(buffer);
@@ -87,9 +89,17 @@ export const uploadFile = async (req, res) => {
   } catch (error) {
     console.error("UPLOAD ERROR:", error.message);
 
-    res.status(500).json({
-      error:   "Upload failed",
-      details: error.message
+    // Return 400 for client-correctable errors, 503 for transient service
+    // failures, 500 for unexpected infrastructure errors.
+    const status =
+      error.code === "UNSUPPORTED_MIME_TYPE" ? 400 :
+      error.code === "MISSING_CREDENTIALS"   ? 503 :
+      error.code === "TIMEOUT"               ? 503 :
+      500;
+
+    res.status(status).json({
+      error:   status === 400 ? error.message : "Upload failed",
+      details: status === 500 ? error.message : undefined,
     });
   }
 };

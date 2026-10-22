@@ -58,9 +58,33 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Backend working 🚀" });
 });
 
+// ── Global error handler ──────────────────────────────────────────────────────
+// Must be registered AFTER all routes. Four-argument signature is required
+// by Express to recognize this as an error-handling middleware.
+//
+// Handles multer errors that bypass the upload controller's try/catch:
+//   - UNSUPPORTED_MIME_TYPE : fileFilter rejected the file → 400
+//   - LIMIT_FILE_SIZE       : file exceeded the 5 MB limit → 400
+// All other errors fall through to a safe generic 500.
+//
+// Security: No stack traces, internal paths, or credential values are
+// included in the client response under any branch.
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
+  if (err.code === "UNSUPPORTED_MIME_TYPE") {
+    return res.status(400).json({ error: err.message });
+  }
+  if (err.code === "LIMIT_FILE_SIZE") {
+    return res.status(400).json({ error: "File too large. Maximum size is 5 MB." });
+  }
+  // Unexpected error — log server-side, never expose details to client.
+  console.error("❌ UNHANDLED ERROR:", err.message);
+  return res.status(500).json({ error: "An unexpected error occurred." });
+});
+
 // ── Start server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+});
