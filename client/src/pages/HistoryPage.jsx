@@ -1,23 +1,41 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { historyAPI } from "../services/api";
 
 const HistoryPage = () => {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://verix-ai-1doz.onrender.com/api/history") // ✅ FIXED URL
+    // Redirect immediately if not logged in
+    if (!token) {
+      navigate("/login", { state: { from: "/history" }, replace: true });
+      return;
+    }
+
+    historyAPI(token)
       .then((res) => {
         setData(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("History fetch error:", err.message);
         setLoading(false);
+
+        if (err.response?.status === 401) {
+          logout();
+          navigate("/login", { state: { from: "/history" }, replace: true });
+        } else {
+          setError(err.response?.data?.error || "Failed to load history. Please try again.");
+        }
       });
-  }, []);
+  }, [token, navigate, logout]);
 
   const filtered = data.filter(
     (item) =>
@@ -53,8 +71,22 @@ const HistoryPage = () => {
         </p>
       )}
 
+      {/* ERROR */}
+      {!loading && error && (
+        <div style={{
+          marginTop: "20px",
+          padding: "14px",
+          borderRadius: "12px",
+          background: "rgba(239,68,68,0.12)",
+          border: "1px solid rgba(239,68,68,0.35)",
+          color: "#fca5a5"
+        }}>
+          {error}
+        </div>
+      )}
+
       {/* NO DATA */}
-      {!loading && filtered.length === 0 && (
+      {!loading && !error && filtered.length === 0 && (
         <p style={{ marginTop: "20px", opacity: 0.7 }}>
           No history found
         </p>

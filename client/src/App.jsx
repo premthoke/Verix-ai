@@ -3,6 +3,8 @@ import Upload from "./components/Upload";
 import "./App.css";
 import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -10,6 +12,14 @@ function App() {
   const [result, setResult] = useState(null);
   const [verifyResult, setVerifyResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const { isLoggedIn, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const downloadPDF = async () => {
     if (!result) return;
@@ -59,9 +69,36 @@ function App() {
       <div className="topbar">
         <h2>⚡ Verix AI</h2>
 
-        <div style={{ display: "flex", gap: "15px" }}>
-          <a href="/" style={{ color: "white" }}>Home</a>
-          <a href="/history" style={{ color: "white" }}>History</a>
+        <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+          <Link to="/" style={{ color: "white" }}>Home</Link>
+
+          {isLoggedIn ? (
+            <>
+              <Link to="/history" style={{ color: "white" }}>History</Link>
+              <span style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                {user?.name}
+              </span>
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "8px",
+                  color: "white",
+                  padding: "5px 12px",
+                  cursor: "pointer",
+                  fontSize: "0.85rem"
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" style={{ color: "white" }}>Login</Link>
+              <Link to="/register" style={{ color: "white" }}>Register</Link>
+            </>
+          )}
         </div>
 
         <span className="status">● System Online</span>
