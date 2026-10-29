@@ -31,16 +31,65 @@ try {
 // ── Express setup ─────────────────────────────────────────────────────────────
 const app = express();
 
+// ── CORS ──────────────────────────────────────────────────────────────────────
+// Allowed origins:
+//   1. Local development server (Vite default port)
+//   2. Production Vercel deployment — exact match
+//   3. Vercel preview deployments for this project only.
+//      Pattern: https://verix-ai-<hash>-premthoke.vercel.app
+//               https://verix-ai-git-<branch>-premthoke.vercel.app
+//      The regex is anchored to the project slug ("verix-ai") and the team
+//      slug ("premthoke") so previews from unrelated Vercel projects are rejected.
+//      Only alphanumeric characters, hyphens, and dots are permitted between them
+//      to guard against path traversal or injection.
+const PREVIEW_ORIGIN_REGEX = /^https:\/\/verix-ai-[a-z0-9-]+-premthoke\.vercel\.app$/;
+
+function isOriginAllowed(origin) {
+  if (!origin) return false;
+  if (origin === "http://localhost:5173") return true;
+  if (origin === "https://verix-ai.vercel.app") return true;
+  if (PREVIEW_ORIGIN_REGEX.test(origin)) return true;
+  return false;
+}
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://verix-ai.vercel.app"
-    ],
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: (origin, callback) => {
+      // origin is undefined for same-origin requests and server-to-server calls.
+      // Allow those through so health checks and backend-internal routes work.
+      if (!origin || isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        // Return false — cors will omit ACAO; browser blocks the response.
+        // Do NOT throw here: that would send a 500 and potentially expose stack info.
+        callback(null, false);
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 204, // IE11 chokes on 204; fine for modern browsers
   })
 );
+
+// Respond to preflight OPTIONS requests for all routes before any other handler.
+// cors() sets preflightContinue: false by default (ends the request at 204).
+// This explicit app.options() call ensures Express 5 also handles preflight
+// for sub-router paths that do not register their own OPTIONS handler.
+app.options("*", cors({
+  origin: (origin, callback) => {
+    if (!origin || isOriginAllowed(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+}));
+
 app.use(express.json());
 
 // ── Routes ────────────────────────────────────────────────────────────────────
@@ -87,4 +136,4 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+});
