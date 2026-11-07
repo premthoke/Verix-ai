@@ -72,23 +72,12 @@ app.use(
   })
 );
 
-// Respond to preflight OPTIONS requests for all routes before any other handler.
-// cors() sets preflightContinue: false by default (ends the request at 204).
-// This explicit app.options() call ensures Express 5 also handles preflight
-// for sub-router paths that do not register their own OPTIONS handler.
-app.options("*", cors({
-  origin: (origin, callback) => {
-    if (!origin || isOriginAllowed(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-  optionsSuccessStatus: 204,
-}));
+// ── Preflight OPTIONS handling ────────────────────────────────────────────────
+// cors() with preflightContinue: false (the default) intercepts every
+// OPTIONS request inside app.use(cors({...})) above, responds with 204, and
+// calls next() only for non-OPTIONS requests.  No separate app.options() route
+// is needed and — as of Express 5 / path-to-regexp v8 — app.options("*", ...)
+// raises a PathError because bare "*" is no longer a valid route pattern.
 
 app.use(express.json());
 
