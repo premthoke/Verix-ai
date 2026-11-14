@@ -1,3 +1,5 @@
+VERIXAI- V2 Coming Soon
+
 <div align="center"><h2>🔎 Verix AI</h2></div>
 <div align="center">AI + Blockchain Deepfake Detection System</div>
 <p align="center"> Detect AI-generated media, verify authenticity using blockchain, and generate QR-based verification reports. </p> 
