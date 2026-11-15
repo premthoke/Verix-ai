@@ -100,9 +100,13 @@ app.get("/api/test", (req, res) => {
 // Must be registered AFTER all routes. Four-argument signature is required
 // by Express to recognize this as an error-handling middleware.
 //
-// Handles multer errors that bypass the upload controller's try/catch:
-//   - UNSUPPORTED_MIME_TYPE : fileFilter rejected the file → 400
+// Handles:
+//   - UNSUPPORTED_MIME_TYPE : multer fileFilter rejected the file → 400
 //   - LIMIT_FILE_SIZE       : file exceeded the 5 MB limit → 400
+//   - entity.parse.failed   : body-parser v2 JSON parse error → 400
+//     body-parser forwards parse errors via next(err) with err.status=400
+//     and err.type='entity.parse.failed' but err.code=undefined, so they
+//     must be detected by err.type rather than err.code.
 // All other errors fall through to a safe generic 500.
 //
 // Security: No stack traces, internal paths, or credential values are
@@ -114,6 +118,11 @@ app.use((err, req, res, _next) => {
   }
   if (err.code === "LIMIT_FILE_SIZE") {
     return res.status(400).json({ error: "File too large. Maximum size is 5 MB." });
+  }
+  // body-parser v2 JSON parse failure — malformed request body from client.
+  // err.code is undefined for these errors; detect by err.type instead.
+  if (err.status === 400 && err.type === "entity.parse.failed") {
+    return res.status(400).json({ error: "Invalid JSON in request body." });
   }
   // Unexpected error — log server-side, never expose details to client.
   console.error("❌ UNHANDLED ERROR:", err.message);
