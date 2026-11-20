@@ -35,20 +35,28 @@ const app = express();
 // Allowed origins:
 //   1. Local development server (Vite default port)
 //   2. Production Vercel deployment — exact match
-//   3. Vercel preview deployments for this project only.
-//      Pattern: https://verix-ai-<hash>-premthoke.vercel.app
-//               https://verix-ai-git-<branch>-premthoke.vercel.app
-//      The regex is anchored to the project slug ("verix-ai") and the team
-//      slug ("premthoke") so previews from unrelated Vercel projects are rejected.
-//      Only alphanumeric characters, hyphens, and dots are permitted between them
-//      to guard against path traversal or injection.
-const PREVIEW_ORIGIN_REGEX = /^https:\/\/verix-ai-[a-z0-9-]+-premthoke\.vercel\.app$/;
+//   3. Vercel preview deployments — project slug "verix-ai", team slug "premthoke"
+//      Pattern: https://verix-ai-<hash|branch>-premthoke.vercel.app
+//      Regex anchored to both slugs; only [a-z0-9-] between them.
+//   4. Vercel preview deployments — project slug "verix", team slug "premthokes-projects"
+//      Pattern: https://verix-<hash>-premthokes-projects.vercel.app
+//      Vercel generates a separate team slug ("premthokes-projects") for the
+//      personal team on some deployment contexts.  The hash segment is [a-z0-9]+
+//      (Vercel uses lowercase alphanumeric only for deployment hashes).
+//      Anchored to both the project slug and the full team slug so that
+//      unrelated projects or teams cannot match.
+const PREVIEW_ORIGIN_REGEX =
+  /^https:\/\/verix-ai-[a-z0-9-]+-premthoke\.vercel\.app$/;
+
+const PREVIEW_ORIGIN_REGEX_ALT =
+  /^https:\/\/verix-[a-z0-9]+-premthokes-projects\.vercel\.app$/;
 
 function isOriginAllowed(origin) {
   if (!origin) return false;
   if (origin === "http://localhost:5173") return true;
   if (origin === "https://verix-ai.vercel.app") return true;
   if (PREVIEW_ORIGIN_REGEX.test(origin)) return true;
+  if (PREVIEW_ORIGIN_REGEX_ALT.test(origin)) return true;
   return false;
 }
 
