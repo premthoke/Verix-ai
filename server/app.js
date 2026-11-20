@@ -45,11 +45,19 @@ const app = express();
 //      (Vercel uses lowercase alphanumeric only for deployment hashes).
 //      Anchored to both the project slug and the full team slug so that
 //      unrelated projects or teams cannot match.
+//   5. Git-branch preview — project "verix-ai", branch "verix-v2", team "premthokes-projects"
+//      Exact match: https://verix-ai-git-verix-v2-premthokes-projects.vercel.app
+//      Vercel creates a stable per-branch URL distinct from per-commit hashes.
+//      Exact match prevents any other branch or project from slipping through.
 const PREVIEW_ORIGIN_REGEX =
   /^https:\/\/verix-ai-[a-z0-9-]+-premthoke\.vercel\.app$/;
 
 const PREVIEW_ORIGIN_REGEX_ALT =
   /^https:\/\/verix-[a-z0-9]+-premthokes-projects\.vercel\.app$/;
+
+// Exact-match regex for the stable git-branch preview on the premthokes-projects team.
+const GIT_BRANCH_PREVIEW_ORIGIN =
+  /^https:\/\/verix-ai-git-verix-v2-premthokes-projects\.vercel\.app$/;
 
 function isOriginAllowed(origin) {
   if (!origin) return false;
@@ -57,6 +65,7 @@ function isOriginAllowed(origin) {
   if (origin === "https://verix-ai.vercel.app") return true;
   if (PREVIEW_ORIGIN_REGEX.test(origin)) return true;
   if (PREVIEW_ORIGIN_REGEX_ALT.test(origin)) return true;
+  if (GIT_BRANCH_PREVIEW_ORIGIN.test(origin)) return true;
   return false;
 }
 

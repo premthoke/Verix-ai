@@ -1,7 +1,7 @@
 /**
  * CORS configuration unit tests for server/app.js
  *
- * These tests verify the isOriginAllowed() logic and both regexes without
+ * These tests verify the isOriginAllowed() logic and all three regexes without
  * starting a server, creating accounts, uploading files, or hitting
  * any live backend or external API.
  */
@@ -21,12 +21,18 @@ const PREVIEW_ORIGIN_REGEX =
 const PREVIEW_ORIGIN_REGEX_ALT =
   /^https:\/\/verix-[a-z0-9]+-premthokes-projects\.vercel\.app$/;
 
+// Pattern 3: exact git-branch preview — project "verix-ai", branch "verix-v2",
+// team "premthokes-projects". Exact match; no other branch or project can pass.
+const GIT_BRANCH_PREVIEW_ORIGIN =
+  /^https:\/\/verix-ai-git-verix-v2-premthokes-projects\.vercel\.app$/;
+
 function isOriginAllowed(origin) {
   if (!origin) return false;
   if (origin === "http://localhost:5173") return true;
   if (origin === "https://verix-ai.vercel.app") return true;
   if (PREVIEW_ORIGIN_REGEX.test(origin)) return true;
   if (PREVIEW_ORIGIN_REGEX_ALT.test(origin)) return true;
+  if (GIT_BRANCH_PREVIEW_ORIGIN.test(origin)) return true;
   return false;
 }
 
@@ -59,12 +65,18 @@ describe("CORS origin policy", () => {
 
     // ── PREVIEW_ORIGIN_REGEX_ALT (verix / premthokes-projects) ───────────────
 
-    test("current preview origin (verix-8fy2y7uig-premthokes-projects) is allowed", () => {
+    test("premthokes-projects deployment hash is allowed", () => {
       assert.ok(isOriginAllowed("https://verix-8fy2y7uig-premthokes-projects.vercel.app"));
     });
 
     test("other premthokes-projects deployment hash is allowed", () => {
       assert.ok(isOriginAllowed("https://verix-9zz9z9zzz-premthokes-projects.vercel.app"));
+    });
+
+    // ── GIT_BRANCH_PREVIEW_ORIGIN (verix-ai / git-verix-v2 / premthokes-projects) ──
+
+    test("git-branch preview (verix-ai-git-verix-v2-premthokes-projects) is allowed", () => {
+      assert.ok(isOriginAllowed("https://verix-ai-git-verix-v2-premthokes-projects.vercel.app"));
     });
   });
 
@@ -99,6 +111,19 @@ describe("CORS origin policy", () => {
 
     test("unrelated project on premthokes-projects team is rejected", () => {
       assert.ok(!isOriginAllowed("https://other-app-8fy2y7uig-premthokes-projects.vercel.app"));
+    });
+
+    test("different git branch on premthokes-projects team is rejected", () => {
+      // Only the verix-v2 branch is allowed; other branches must not pass
+      assert.ok(!isOriginAllowed("https://verix-ai-git-main-premthokes-projects.vercel.app"));
+    });
+
+    test("unrelated project git-branch preview on premthokes-projects team is rejected", () => {
+      assert.ok(!isOriginAllowed("https://other-app-git-verix-v2-premthokes-projects.vercel.app"));
+    });
+
+    test("git-branch preview with wrong team is rejected", () => {
+      assert.ok(!isOriginAllowed("https://verix-ai-git-verix-v2-evil-team.vercel.app"));
     });
 
     test("http (non-TLS) production URL is rejected", () => {
